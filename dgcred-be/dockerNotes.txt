@@ -1,0 +1,16 @@
+   61  docker ls
+   62  docker images
+   63  docker push 682365038541.dkr.ecr.us-west-2.amazonaws.com/dgcred:latest
+   64  aws ecr get-login --region us-west-2
+   65  aws ecr get-login --region us-east-1
+   66  docker login -u AWS -p AQECAHhwm0YaISJeRtJm5n1G6uqeekXuoXXPe5UFce9Rq8/14wAAAyEwggMdBgkqhkiG9w0BBwagggMOMIIDCgIBADCCAwMGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM/KCouIUr8gaIWGYRAgEQgIIC1BtA8yH1WZZrJdLHWfeepNlgiesv4lkuwBHaeZrRXVIJ7RJ4nKqiDXHZs5IDkn1DaNX0p0e6V0k4CSZ3RyrqVo3p8znSiMaq11E9JRTgkKRDh3di0Yv1+YCKayfxVDMONJ8ZL151aGpUrBSBS9oKn3j0THgDGAVyObz2mmfICX1tXLBtXtnVjNv4qmSmj7+dsnFgG/gaovUw8RQVLjtxmyM8b7XwaJRsAt5sBsddIwHhSlSxiNKqvYZgKta9hTqF8Tsm9H/y9m3YJXthwUBwQB8jmWobOvGXRBx9NyJ/6bX1U6ixssaYHUs7Bp79OjCwJ2Jx/sZwH8qq3qGAjdLI9o2AaFUuB2pGI59BIOt1mVTiKY/OaRy5CV8p3H4dH/IwQ1VqDNh3o2qw/9AtbBs8pSQLLbhC/i41zRZgCSWWpMi+YUUG1Y/pnT2MeuLyj33lhiM1Ne34Dz4g15mi/Z7VupGUC/8YhpHcqatJW793QrZt4fSnT4H7zyjQz9uYM2YoaJ38+et9wytAbLwVeQYU64byzs1MTZ9jYxKRAAPPFm9Gut/y7K05UATPtUPcKZJR5Fqy0yFQytGiRD3r9MIN/RLysjpL/hP3uXzX0uLQAy6aO1EiGWFq28sRlV+VUhlfGaJZMStS6pmrw0xTPRpNVU+BlAoGiMvSLXE/Ua3ltBEtdqQxhQj83eH1TdawE603o+dR0N39j9WrUZCgQtO/97g0INwxwX8YnFaEZn+ygD8KXqcm0ulJM6ENm4C7FK5+BJ5oSOswhQXN7uavV3tF/j8bFeVamHIdPp8U4ltloDZ6bgONZWgv0qyUeXhp66C8n51vj9zBTkdQ6wzlaEzf9kIlCVYurqvlq/ImIDEu7clen7ypd/CZd8WLHinP4Pzcr3omhp3DIFU/HSzAnuXANrWMTMq7ej6mzj0MSfDg7m1LneLfGTOuPlsjJLrIh+8SIEJVb2I= -e none https://682365038541.dkr.ecr.us-east-1.amazonaws.com
+   67  docker tag  dab4d3b2381b 682365038541.dkr.ecr.us-east-1.amazonaws.com/dgcred
+   68  docker images
+   69  docker push 682365038541.dkr.ecr.us-east-1.amazonaws.com/dgcred:latest
+   70  docker push 682365038541.dkr.ecr.us-west-2.amazonaws.com/dgcred:latest
+   71  docker tag dgcdevelopment/rem-be:latest 682365038541.dkr.ecr.us-west-2.amazonaws.com/dgcred:latest
+   72  docker push 682365038541.dkr.ecr.us-west-2.amazonaws.com/dgcred:latest
+   73  aws ecr get-login --region us-west-2
+   74  docker login -u AWS -p AQECAHj6lc4XIJw/7ln0Hc00DMek6GExHCbY4RIpTMCI58InUwAAAyEwggMdBgkqhkiG9w0BBwagggMOMIIDCgIBADCCAwMGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMiVR0QQF+xjaXF6FVAgEQgIIC1G8rq4CscFnpoSg0y53vfYey2EyFIWR4J6GuYyRAPeOmREGpnn4HS4hUNTxEG5KIhb+HijtjBV3G/oRp8WVSlrZZZ+K3ae3D3xbGAANccawbBrvihgMq0zFhddKQx+GJrFIR2KJhsLT/BnSuaKqQiKD6IzExm/PjBK6mbNws3kSZ4n5MpBiBfc1y2I7Ulgr4Hr9wDg93IivEOzn2peanUlRybN+BTKtd1TdaaperV9R33L8aKyPXXel2wKugv7j9hL+fk+q5RQD4xYso+FrVK7Tx/W/ua6gQwWrC1KJZJdGBLPtaGtPCCBLfrxIKI13EwNE6/edyvpdtc0MNhjP8o1+vxxZKDjmcCZiQKTn8OQLrKVdqSv/YGwff0KG6CxSOFIB/J6PaNH1ufqtsPwgq1wL308gIFN2v0C7eGBweBAdfFIjZyYS/XuNIzWNM6r3ZO6ox4a5MB7Wlu7zSMwRR6GXt+o6SjR2WHkgxox6u8kkABO7V8PDKiWujM7zXb3+XOXj5tdt7k0ZDr06VpsIIEAH1BKu3bxpL3xeIfOBNKJQM78zNVqZiciyGUlJt09biLkFStNGZlq3Tx5Fn4R3S0FWeh5FhED/lBAZ9viKRKUuqOqH29JlrxNdi2f5KgA8ePR3tDnXE3/DYx4o5Nl01iNPnJv7dGN4NUIag4+S+4UqrBD30hjLFLzxD5cAho2X7nUHs0PAUrvQ/6w2J47MowaCgyIKMf5NCTW+ZjZMeHWE2SnyU7TRSAYz4QL9cOiDsm/I0IkbyI489nS5H4DhTiYemLNow4t3w5YgxegY4jFE0Vu9xjfnLzVkIFxgok0vI7EZz2s1ZhVQjrFq6ZyCSOSVbQ8NdAMzISECFrhJheEn9lt5iwCfI35DxyqcdbXQ3WP/ccCw7MRAZh9rFxa/xBT60V6iHc8KDeMA745DzxG9cmas28CxmnBsKM+C74H0tl5kUSJI= -e none https://682365038541.dkr.ecr.us-west-2.amazonaws.com
+   75  docker push 682365038541.dkr.ecr.us-west-2.amazonaws.com/dgcred:latest
+   76  history

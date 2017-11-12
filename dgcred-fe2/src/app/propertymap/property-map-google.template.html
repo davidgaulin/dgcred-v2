@@ -1,0 +1,29 @@
+<agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
+  <agm-marker 
+      *ngFor="let m of markers; let i = index"
+      (markerClick)="clickedMarker(m.label, i)"
+      [latitude]="m.lat"
+      [longitude]="m.lng"
+      [markerDraggable]="m.draggable"
+      [iconUrl]="m.icon">
+
+
+      <agm-snazzy-info-window [maxWidth]="200" [closeWhenOthersOpen]="true">
+          <ng-template>
+              <div *ngIf="m.property">
+                  <div *ngIf="m.property.name">{{m.property.name}}</div>
+                  <div *ngIf="m.property.address?.address1">{{m.property.address?.address1}}</div>
+                  <div *ngIf="m.property.address?.address2">{{m.property.address?.address2}}</div>
+                  <div *ngIf="m.property.address?.city">{{m.property.address?.city}}</div>
+
+                  <!-- TODO Create router see https://embed.plnkr.co/?show=preview heroes for example -->
+                  <p><a href="/property/edit/{{m.property.eid}}" i18n>Edit</a></p>
+                </div>
+          </ng-template>
+        </agm-snazzy-info-window>
+
+
+
+
+  </agm-marker>
+</agm-map>
