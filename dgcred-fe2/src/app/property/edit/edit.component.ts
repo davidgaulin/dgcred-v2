@@ -42,12 +42,9 @@ export class EditComponent implements OnInit {
   public propertyIsLoading = false;
   public properties: Observable<any>;
 
-
-  public purchaseDate: NgbDateStruct;
-  public evaluationDate: NgbDateStruct;
-
   // lookups
   public provinces: any[];
+  public propertyTypes: any[];
   public countries: any[];
   public areaUnits: any[];
   public rentPeriods: any[];
@@ -83,11 +80,9 @@ export class EditComponent implements OnInit {
         p => { },
         e => {
           this.errorMessage = e.message;
-          console.log("ERROR ADDING");
           console.log(this.errorMessage);
         },
         () => { });
-      console.log("Document Added!!!!!!!!!!");
     }
   }
 
@@ -111,20 +106,19 @@ export class EditComponent implements OnInit {
           this.propertyIsLoading = false;
         });
     }
-
-    //jQuery('.select2').select2();
-
     this.lookupService.getAll().subscribe(
       p => {
       this.provinces = p.provinces;
         this.countries = p.countries;
         this.rentPeriods = p.rentPeriods;
         this.areaUnits = p.areaUnits;
+        this.propertyTypes = p.propertyTypes;
       },
       e => { this.errorMessage = e; console.log(this.errorMessage); },
       () => {
         if (!eid) {
           this.newProperty();
+          console.log("pathc1");
           this.propertyForm.patchValue(this.property, { onlySelf: true });
         }
         this.isLoading = false;
@@ -134,12 +128,6 @@ export class EditComponent implements OnInit {
 
   updatePropertyForm() {
     this.propertyForm.patchValue(this.property, { onlySelf: true });
-    console.log("Date to isoString:");
-
-    var pdate: Date = new Date(this.property.purchaseDate);
-    this.purchaseDate = { day: pdate.getUTCDay(), month: pdate.getUTCMonth() + 1, year: pdate.getUTCFullYear() };
-    var edate: Date = new Date(this.property.purchaseDate);
-    this.evaluationDate = { day: edate.getUTCDay(), month: edate.getUTCMonth() + 1, year: edate.getUTCFullYear() };
   }
 
   buildForm() {
@@ -148,6 +136,7 @@ export class EditComponent implements OnInit {
       evaluation: [0],
       evaluationDate: [''],
       name: ['', Validators.required],
+      type: ['', Validators.required],
       purchaseDate: [''],
       purchasePrice: [0],
       constructionYear: [0],
@@ -178,7 +167,7 @@ export class EditComponent implements OnInit {
     unit.bathrooms = '1';
     unit.bedrooms = '2';
     unit.description = ''
-    this.property = new Property(0, '', 0, 0, address);
+    this.property = new Property(0, '', '', 0, 0, address);
     this.property.evaluation = 0;
     this.property.units = [unit];
   }
@@ -224,8 +213,11 @@ export class EditComponent implements OnInit {
     this.isSaving = true;
     // update purchase date since it is standalone
     console.log("WTFGFFFFFFFF");
-    theForm.patchValue({ purchaseDate: new Date(this.purchaseDate['year'], this.purchaseDate['month'] - 1, this.purchaseDate['day']).getTime() / 1000 });
-    theForm.patchValue({ evaluationDate: new Date(this.evaluationDate['year'], this.evaluationDate['month'] - 1, this.evaluationDate['day']).getTime() / 1000 });
+    //theForm.patchValue({ purchaseDate: new Date(this.purchaseDate['year'], this.purchaseDate['month'] - 1, this.purchaseDate['day']).getTime() / 1000 });
+    console.log(theForm.value['evaluationDate']);    
+    //theForm.patchValue({ evaluationDate: new Date(2018, 1, 1).getTime() / 1000 });
+    console.log(theForm.value);
+    
     this.propertyService.save(theForm.value).subscribe(
       p => { },
       e => {

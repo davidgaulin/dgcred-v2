@@ -15,6 +15,7 @@ export class LookupService {
     isLoading: boolean = false;
     areaUnits: any;
     rentPeriods: any;
+    propertyTypes: any;
 
     getProvinces() : any {
         console.log("Getting");
@@ -25,6 +26,18 @@ export class LookupService {
             this.getAll();
             console.log("Getting New");
             return this.provinces;
+        }
+    }
+
+    getPropertyTypes() : any {
+        console.log("Getting");
+        if (this.propertyTypes) {
+            console.log("Getting Existing");
+            return this.propertyTypes;
+        } else {
+            this.getAll();
+            console.log("Getting New");
+            return this.propertyTypes;
         }
     }
 

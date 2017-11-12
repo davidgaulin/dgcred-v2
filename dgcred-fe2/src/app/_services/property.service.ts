@@ -30,7 +30,7 @@ export class PropertyService {
     getAll() {
         // TODO REMOVE
         let b: Property;
-        b = new Property(0, 'put test');
+        b = new Property(0, '3', 'put test');
         let a = this.http.put('http://localhost:8080/api/property/put', b).map((response: Response) => response.json()).catch(handleError);
         // TODO END
 

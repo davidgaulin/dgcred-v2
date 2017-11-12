@@ -17,6 +17,7 @@ export class ListComponent implements OnInit {
   // lookups
   provinces: any[];
   countries: any[];
+  propertyTypes: any[];
 
   links: any[];
 
@@ -38,6 +39,7 @@ export class ListComponent implements OnInit {
       p => {
         this.provinces = p.provinces;
         this.countries = p.countries;
+        this.propertyTypes = p.propertyTypes;
       },
       e => { this.errorMessage = e; console.log(e) },
       () => { });
@@ -66,15 +68,6 @@ export class ListComponent implements OnInit {
           if (this.properties[i].units) {
             this.properties[i].units = this.properties[i].units.sort((n1,n2) => n1 - n2);
           }
-          //var marker = new MapMarker();
-          //if (this.properties[i].latitude > 0) {
-          //marker.lat = this.properties[i].latitude;
-          //marker.lng = this.properties[i].longitude;
-          //marker.label = this.properties[i].name;
-          //marker.property = this.properties[i];
-          //marker.draggable = false;
-          //this.markers.push(marker);
-          //}
         }
         this.isLoading = false;
       });

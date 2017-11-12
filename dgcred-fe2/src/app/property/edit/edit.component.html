@@ -40,13 +40,20 @@
           <div class="px-3">
             <div class="form-body row">
               <label for="name" class="col-sm-2 col-md-2 control-label" i18n>Property Alias</label>
-              <div class="col-md-6 col-xs-6">
+              <div class="col-md-3 col-xs-3">
                 <input type="text" class="form-control" id="name" name="name" placeholder="Property Alias ex: Blue house, Mom's condo, 12 sunny rd)"
                   formControlName="name" i18n-placeholder>
                 <p>
                   <small class="text-muted">Used accross the application to reference this property.</small>
                 </p>
               </div>
+              <label for="type" class="col-sm-2 col-md-2 control-label" i18n>Type</label>
+              <div class="col-md-3 col-xs-3">
+                <select id="type" name="type" formControlName="type" data-theme="bootstrap" data-placeholder="Choose a Province or State..."
+                  class="form-control select2" i18n-data-placeholder>
+                  <option *ngFor="let ptype of propertyTypes" [ngValue]="ptype.code"> {{ ptype.value}} </option>
+                </select>
+              </div>              
             </div>
             <div class="form-body row">
               <label for="purchasePrice" class="col-sm-2 col-md-2 control-label" i18n>Purchased Price</label>
@@ -56,7 +63,7 @@
               </div>
               <label for="purchaseDate" class="col-sm-2 col-md-2 control-label" i18n>Purchased Date</label>
               <div class="col-md-3 col-xs-3 input-group">
-                <input type="date" id="purchaseDate" class="form-control" name="purchaseDate" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Purchased">
+                <input type="date" id="purchaseDate" class="form-control" name="purchaseDate" formControlName="purchaseDate" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Date Purchased">
                 <div class="input-group-addon">
                   <i class="fa fa-calendar" style="cursor: pointer;"></i>
                 </div>
@@ -71,7 +78,21 @@
               </div>
               <label for="evaluationDate" class="col-sm-2 col-md-2 control-label" i18n>Evaluation Date</label>
               <div class="col-md-3 col-xs-3 input-group">
-                <input type="date" id="evaluationDate" class="form-control" name="evaluationDate" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Evaluation Date">
+                <input type="date" id="evaluationDate" class="form-control input-md" name="evaluationDate" formControlName="evaluationDate" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Evaluation Date">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="form-body row">
+              <label for="financed" class="col-sm-2 col-md-2 control-label" i18n>Has an active loan?</label>
+              <div class="col-md-3 col-xs-3 input-group">
+                  <input type="checkbox" id="financed" class="form-control input-md" name="financed" formControlName="financed" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Has an active loan">
+              </div>  
+              <label for="constructionYear" class="col-sm-2 col-md-2 control-label" i18n>Construction Year</label>
+              <div class="col-md-3 col-xs-3 input-group">
+                <input type="number" class="form-control current" id="constructionYear" name="constructionYear" placeholder="" formControlName="constructionYear"
+                  i18n-placeholder>
                 <div class="input-group-addon">
                   <i class="fa fa-calendar" style="cursor: pointer;"></i>
                 </div>
@@ -180,7 +201,9 @@
           </div>
           <div class="card-footer">
             <button type="button" (click)="onSubmit(this.propertyForm)" [disabled]="!propertyForm.valid" class="btn btn-primary btn-raised" i18n>Save</button>
-            <button type="button" (click)="addUnit()" class="btn btn-primary btn-raised" i18n>Add Unit</button>
+            <span *ngIf="propertyForm.controls.type.value == '3'">
+              <button type="button" (click)="addUnit()" class="btn btn-primary btn-raised" i18n>Add Unit</button>
+            </span>
             <button type="button" (click)="cancel()" class="btn btn-secondary " i18n>Cancel</button>
 
           </div>

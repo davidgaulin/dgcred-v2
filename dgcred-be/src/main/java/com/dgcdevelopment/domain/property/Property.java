@@ -20,6 +20,7 @@ import org.joda.time.Months;
 import com.dgcdevelopment.domain.Address;
 import com.dgcdevelopment.domain.Document;
 import com.dgcdevelopment.domain.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
@@ -32,6 +33,19 @@ public class Property {
     private Long eid;
 	private double evaluation;
 	private Date evaluationDate;
+	
+	private String type;
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	@JsonFormat
+    (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	public Date getEvaluationDate() {
 		return evaluationDate;
 	}
@@ -55,6 +69,8 @@ public class Property {
 
 	private Date purchaseDate = new Date();
 	
+	@JsonFormat
+    (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	public Date getPurchaseDate() {
 		return purchaseDate;
 	}

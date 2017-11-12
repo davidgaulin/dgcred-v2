@@ -48,6 +48,17 @@ public class LookupController {
 		return provinces;
 	}
 
+	@GetMapping("/api/lookup/propertyTypes")
+	public List<Lookup> getPropertyTypes(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		// To do get this form DB
+		List<Lookup> provinces = new ArrayList<>();
+		provinces.add(new Lookup("1", "House"));
+		provinces.add(new Lookup("2", "Condo"));
+		provinces.add(new Lookup("3", "Plex"));
+		return provinces;
+	}
+	
 	@GetMapping("/api/lookups")
 	public Map<String, List<Lookup>> getLookups(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -57,6 +68,7 @@ public class LookupController {
 		lookups.put("countries", getCountry(request, response));
 		lookups.put("areaUnits", getAreaUnits(request, response));
 		lookups.put("rentPeriods", getRentPeriodss(request, response));
+		lookups.put("propertyTypes", getPropertyTypes(request, response));
 		return lookups;
 	}
 
