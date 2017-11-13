@@ -26,7 +26,6 @@ import com.dgcdevelopment.domain.financing.Loan;
 @CrossOrigin
 public class LoanController {
 	
-	
 	private final Logger log = LoggerFactory.getLogger(this.getClass()); 
 	
 	@Autowired
@@ -36,11 +35,11 @@ public class LoanController {
     public Iterable<Loan> getLoans(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		Thread.sleep(1000);
-		log.info("Retrieving all buildings...");
-		Iterable<Loan> propeties = loanRepo.findByUserOrderByEidAsc((User) request.getAttribute("user"));
-		log.info("Retrieve all buildings completed");
+		log.info("Retrieving all loans...");
+		Iterable<Loan> loans = loanRepo.findByUserOrderByEidAsc((User) request.getAttribute("user"));
+		log.info("Retrieve all loans completed");
 		
-		return propeties;
+		return loans;
     }
 	
 	@GetMapping("/api/loan/{eid}")

@@ -1,0 +1,80 @@
+<div [formGroup]="unitForm">
+    <input type="hidden" id="eid" name="eid" formControlName="eid">
+    <div class="row">
+      <label for="area" class="col-sm-2 col-md-2 control-label" i18n>Label</label>
+      <div class="col-sm-2 col-md-2">
+        <input type="text" class="form-control" 
+               id="number" name="number" placeholder="ex: 1A, 104, 404 (leave empty if only one unit)" 
+               formControlName="number" i18n-placeholder>
+      </div>
+      <label for="bedrooms" class="col-sm-1 col-md-1 control-label text-sm-right text-xs-right text-md-right">
+        <span class="icon">
+            <i class="fa fa-bed fa-2x" i18n-title title="Bedrooms"></i>
+        </span>
+      </label>
+      <div class="col-sm-3 col-md-3">
+        <select id="bedrooms" name="bedrooms" formControlName="bedrooms"
+            data-theme="bootstrap"
+            class="form-control select2" i18n-data-placeholder>
+          <option *ngFor="let bedroom of bedroomsList" [ngValue]="bedroom"> {{ bedroom }} </option>
+        </select>
+      </div>
+      <label for="bathrooms" class="col-sm-1 col-md-1 control-label text-sm-right text-xs-right text-md-right">
+        <span class="icon">
+            <i class="fa fa-bath fa-2x" i18n-title title="Bathrooms"></i>
+        </span>
+      </label>
+      <div class="col-sm-2 col-md-2 control-label">
+        <select id="bathrooms" name="bathrooms" formControlName="bathrooms"
+            data-theme="bootstrap"
+            class="form-control select2" i18n-data-placeholder>
+          <option *ngFor="let bathroom of bathroomsList" [ngValue]="bathroom"> {{ bathroom }} </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <label for="area" class="col-sm-2 col-md-2 control-label" i18n>Surface</label>
+      <div class="col-sm-3 col-md-3">
+        <input type="text" class="form-control" 
+               id="area" name="area" placeholder="Surface area" 
+               formControlName="area" i18n-placeholder>
+      </div>
+      <div class="col-sm-6 col-md-6">
+        <select id="areaUnit" name="areaUnit" formControlName="areaUnit"
+            data-theme="bootstrap"
+            class="form-control select2" i18n-data-placeholder>
+          <option *ngFor="let areaUnit of areaUnits" [ngValue]="areaUnit.code"> {{ areaUnit.value}} </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <label for="projectedRent" class="col-sm-2 col-md-2 control-label" i18n>Rent</label>
+      <div class="col-sm-3 col-md-3 input-group">
+        <input type="text" class="form-control" 
+               id="projectedRent" name="projectedRent" placeholder="0" 
+               formControlName="projectedRent" i18n-placeholder> 
+               <span class="input-group-addon">$</span>
+      </div>
+      <div class="col-sm-1 col-md-1">
+        &nbsp;<span i18n>per</span>&nbsp;
+      </div>
+      <div class="col-sm-5 col-md-5">
+        <select id="rentPeriod" name="rentPeriod" formControlName="rentPeriod"
+                data-theme="bootstrap" 
+                class="form-control select2" i18n-data-placeholder>
+          <option *ngFor="let rentPeriod of rentPeriods" [ngValue]="rentPeriod.code"> {{ rentPeriod.value}} </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <label for="description" class="col-sm-2 col-md-2 control-label" i18n>Description</label>
+      <div class="col-sm-9 col-md-9 input-group">
+        <textarea class="form-control" 
+               id="description" name="description" placeholder="" 
+               formControlName="description" i18n-placeholder></textarea>
+      </div>
+    </div>    
+</div>

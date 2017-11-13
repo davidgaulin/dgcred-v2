@@ -1,0 +1,82 @@
+<div class="row">
+    <div class="col-12">
+        <div class="content-header" i18n>Loans</div>
+        <p class="content-sub-header" i18n>List of your current loans.</p>
+    </div>
+</div>
+<section id="extended">
+    <div class="row" *ngIf="!isLoading">
+
+        <section *ngIf="errorMessage">
+            <div class='error'>
+                <p>{{ errorMessage }}</p>
+                <p>
+                    <a href="/login?returnUrl=/app/financing/list">Login Again</a>
+                </p>
+            </div>
+        </section>
+
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-block">
+
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th i18n></th>
+                                    <th i18n>Amount</th>
+                                    <th i18n>Estimated Balance</th>
+                                    <th i18n>Rate</th>
+                                    <th i18n>Property</th>
+                                    <th i18n></th>
+                                </tr>
+                            </thead>
+
+                            <tfoot>
+                                <td colspan="5"></td>
+                                <td colspan="1">
+                                    <button type="button" [routerLink]="['../edit']" class="btn btn-secondary btn-sm" i18n>Add</button>
+                                </td>
+                            </tfoot>
+
+                            <tbody>
+                                <tr *ngIf="loans && loans.length == 0">
+                                    <td colspan="6" i18n>
+                                        You don't have any loan in the system. Click the
+                                        <button type="button" [routerLink]="['../edit']" class="btn btn-secondary btn-sm" i18n>Add</button>
+                                        button to start your journey.
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let l of loans">
+                                    <td>
+                                        <a routerLink="../edit/{{l.eid}}">
+                                            <img src="{{l.financialInstitution.logoUrl}}" width="25">
+                                        </a>
+                                    </td>
+                                    <td>
+                                            <a routerLink="../edit/{{l.eid}}">${{l.amount | number:'.2-2'}}</a>
+                                        </td>
+                                        <td>
+                                            <a routerLink="../edit/{{l.eid}}">${{l.balance | number:'.2-2'}}</a>
+                                        </td> 
+                                        <td>
+                                                <a routerLink="../edit/{{l.eid}}">%{{l.interestRate | number:'.2-2' }}</a>
+                                            </td>                                                                           
+                                    <td>
+                                        <a routerLink="../edit/{{l.eid}}">{{l.property.name || l.property.address.address1}}</a>
+                                    </td>
+                                    <td>
+                                        <button type="button" (click)="delete( l.eid )" class="btn btn-secondary btn-sm" i18n>
+                                            <i class="ft-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
