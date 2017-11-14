@@ -7,5 +7,6 @@ export * from './lookup.service';
 export * from './financialgraph.service';
 export * from './financing.service';
 export * from './loan.service';
+export * from './lease.service';
 export * from './calendar.service';
 export * from './ratehub.service';

@@ -23,7 +23,7 @@ import {
     AlertService, AuthenticationService,
     UserService, PropertyService, FinancialGraphService, LoanService,
     AuthHttpService, LookupService, CalendarService, RateHubService,
-    FinancingService
+    FinancingService, LeaseService
 } from './_services/index';
 
 
@@ -60,6 +60,7 @@ import * as $ from 'jquery';
         LookupService,
         PropertyService,
         FinancialGraphService,
+        LeaseService,
         FinancingService,
         LoanService,
         CalendarService,

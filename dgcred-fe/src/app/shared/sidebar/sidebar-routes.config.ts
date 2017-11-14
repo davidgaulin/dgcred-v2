@@ -3,12 +3,7 @@ import { RouteInfo } from './sidebar.metadata';
 //Sidebar menu Routes and data
 export const ROUTES: RouteInfo[] = [
 
-    {
-        path: '', title: 'Dashboard', icon: 'ft-activity', class: 'has-sub', badge: '2', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, submenu: [
-            { path: '/dashboard/dashboard1', title: 'Dashboard1', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/dashboard/dashboard2', title: 'Dashboard2', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-        ]
-    },
+    { path: '/dashboard/dashboard1', title: 'Dashboard', icon: 'ft-activity', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
     {
         path: '', title: 'Properties', icon: 'ft-home', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, submenu: [
             { path: '/property/list', title: 'Existing Properties', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
@@ -19,6 +14,12 @@ export const ROUTES: RouteInfo[] = [
         path: '', title: 'Financing', icon: 'ft-clipboard', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, submenu: [
             { path: '/financing/list', title: 'Existing Mortgages', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
             { path: '/financing/edit', title: 'Add a New Mortgage', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+        ]
+    },
+    {
+        path: '', title: 'Leases', icon: 'ft-clipboard', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, submenu: [
+            { path: '/leases/list', title: 'Existing Leases', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+            { path: '/leases/edit', title: 'Add a New Leases', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
         ]
     },
     { path: '/colorpalettes', title: 'Color Palette', icon: 'ft-droplet', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },

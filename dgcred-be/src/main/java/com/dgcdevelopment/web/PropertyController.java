@@ -34,53 +34,55 @@ import com.dgcdevelopment.domain.property.Property;
 import com.dgcdevelopment.domain.property.PropertyRepository;
 import com.dgcdevelopment.domain.property.Unit;
 
-
 @RestController
 @CrossOrigin
 public class PropertyController {
-	
-	private final Logger log = LoggerFactory.getLogger(this.getClass()); 
-	
+
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	private PropertyRepository propertyRepo;
-	
+
 	@Autowired
 	private DocumentRepository documentRepo;
-	
+
 	@Autowired
 	private LoanRepository loanRepo;
-	
+
 	@Autowired
 	private IGeoLocator geoLocator;
 
 	@GetMapping("/api/property")
-    public Iterable<Property> getProperties(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public Iterable<Property> getProperties(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		Thread.sleep(1000);
 		log.info("Retrieving all buildings...");
 		Iterable<Property> propeties = propertyRepo.findByUserOrderByEidAsc((User) request.getAttribute("user"));
 		// HATEOAS??
-//		for (Property property : propeties) {
-//			property.add(ControllerLinkBuilder.linkTo(PropertyController.class, 
-//					PropertyController.class.getMethod("getProperty", 
-//							Long.class, HttpServletRequest.class, 
-//							HttpServletResponse.class), property.getEid(), request, response).withSelfRel());
-//		}
+		// for (Property property : propeties) {
+		// property.add(ControllerLinkBuilder.linkTo(PropertyController.class,
+		// PropertyController.class.getMethod("getProperty",
+		// Long.class, HttpServletRequest.class,
+		// HttpServletResponse.class), property.getEid(), request,
+		// response).withSelfRel());
+		// }
 		log.info("Retrieve all buildings completed");
-		
+
 		return propeties;
-    }
-	
+	}
+
 	@GetMapping("/api/property/{eid}")
-    public Property getProperty(@PathVariable Long eid, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public Property getProperty(@PathVariable Long eid, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 
 		log.info("Retrieving one property: " + eid);
 		Property property = propertyRepo.findOneByUserAndEid((User) request.getAttribute("user"), eid);
 		// HATEOAS??
-//		property.add(ControllerLinkBuilder.linkTo(PropertyController.class, 
-//				PropertyController.class.getMethod("getProperty", 
-//						Long.class, HttpServletRequest.class, 
-//						HttpServletResponse.class), property.getEid(), request, response).withSelfRel());
+		// property.add(ControllerLinkBuilder.linkTo(PropertyController.class,
+		// PropertyController.class.getMethod("getProperty",
+		// Long.class, HttpServletRequest.class,
+		// HttpServletResponse.class), property.getEid(), request,
+		// response).withSelfRel());
 
 		// Not found
 		if (property == null) {
@@ -88,41 +90,39 @@ public class PropertyController {
 			throw new MissingEntityException("Can't find property for eid: " + eid);
 		}
 		log.info("Retrieve property completed");
-		
+
 		return property;
-    }	
+	}
 
 	@PostMapping("/api/property")
-    public Property saveProperty(HttpServletRequest request, 
-    		@RequestBody Property property) throws Exception {
+	public Property saveProperty(HttpServletRequest request, @RequestBody Property property) throws Exception {
 		log.info("Saving building...");
 		property.setUser((User) request.getAttribute("user"));
-		
+
 		// Grab the document and put them in
 		property.getUnits().toArray(new Unit[0])[0].getEid();
-		if (property.getEid() != null) {
+		if (property.getEid() != null && property.getEid() > 0) {
 			System.out.println(property.getEid());
 			Property tmpP = propertyRepo.findOne(property.getEid());
 			if (tmpP != null) {
 				property.setDocuments(tmpP.getDocuments());
 			}
 		}
-		
+
 		// Grab the long/lat
 		double[] longLat = geoLocator.getLongLat(property.getAddress());
 		property.setLongitude(longLat[0]);
 		property.setLatitude(longLat[1]);
-		
+
 		// Save the property
 		Property b = propertyRepo.save(property);
 		log.info("Save building completed");
 		return b;
-    }
-
+	}
 
 	@GetMapping("/api/property/addDocument/{peid}/{deid}")
-    public Property updatePropertyDoc(HttpServletRequest request, 
-    		@PathVariable Long deid, @PathVariable Long peid) throws Exception {
+	public Property updatePropertyDoc(HttpServletRequest request, @PathVariable Long deid, @PathVariable Long peid)
+			throws Exception {
 		log.info("Attaching doc: " + deid + " to property: " + peid + "...");
 		Property p = propertyRepo.findOneByUserAndEid((User) request.getAttribute("user"), peid);
 		boolean found = false;
@@ -131,7 +131,7 @@ public class PropertyController {
 				found = true;
 			}
 		}
-		
+
 		if (!found) {
 			Document d = documentRepo.findOneByUserAndEid((User) request.getAttribute("user"), deid);
 			if (d != null && d.getEid() != null) {
@@ -141,11 +141,11 @@ public class PropertyController {
 		}
 		log.info("Doc: " + deid + " attached to property: " + peid + "...");
 		return p;
-    }
-	
+	}
+
 	@GetMapping("/api/property/deleteDocument/{peid}/{deid}")
-    public Property deletePropertyDoc(HttpServletRequest request, 
-    		@PathVariable Long deid, @PathVariable Long peid) throws Exception {
+	public Property deletePropertyDoc(HttpServletRequest request, @PathVariable Long deid, @PathVariable Long peid)
+			throws Exception {
 		log.info("Deleting doc: " + deid + " from property: " + peid + "...");
 		Property p = propertyRepo.findOneByUserAndEid((User) request.getAttribute("user"), peid);
 		boolean found = false;
@@ -161,37 +161,36 @@ public class PropertyController {
 		}
 		log.info("Doc: " + deid + " deleted from property: " + peid + "...");
 		return p;
-    }
+	}
 
-	
 	@PutMapping("/api/property/put")
-    public Property putProperty(HttpServletRequest request) throws Exception {
+	public Property putProperty(HttpServletRequest request) throws Exception {
 
 		// TODO
 		Property b = new Property();
 		b.setName("asdf");
 		return b;
-    }
-	
-	@RequestMapping(value="/api/property/range/{start}/{count}")
-	public Iterable<Property> getRangeOfProperties(HttpServletRequest request, 
-			@PathVariable("start") int start, 
-			@PathVariable("count") int count) throws Exception {
-		
-		PageRequest pageRequest = new PageRequest(start, count);
-		Iterable<Property> properties = propertyRepo.findByUserOrderByEidAsc((User) request.getAttribute("user"), pageRequest);
-				
-		return properties;
-		
-		//return buildings;
 	}
-		
+
+	@RequestMapping(value = "/api/property/range/{start}/{count}")
+	public Iterable<Property> getRangeOfProperties(HttpServletRequest request, @PathVariable("start") int start,
+			@PathVariable("count") int count) throws Exception {
+
+		PageRequest pageRequest = new PageRequest(start, count);
+		Iterable<Property> properties = propertyRepo.findByUserOrderByEidAsc((User) request.getAttribute("user"),
+				pageRequest);
+
+		return properties;
+
+		// return buildings;
+	}
+
 	@DeleteMapping("/api/property/{eid}")
 	@Transactional
-    public User deleteOneProperty(HttpServletRequest request, @PathVariable("eid") long eid) throws Exception {
+	public User deleteOneProperty(HttpServletRequest request, @PathVariable("eid") long eid) throws Exception {
 		User u = (User) request.getAttribute("user");
 		log.info("Deleting building eid: " + eid + " User: " + u.getUsername());
-		
+
 		// Find if property is attached to a loan
 		List<Loan> loans = loanRepo.findByPropertyEidAndUser(eid, u);
 		if (loans.size() > 0) {
@@ -200,21 +199,19 @@ public class PropertyController {
 					+ " or delete the loans first.");
 		}
 		propertyRepo.deleteByEidAndUser(eid, u);
-		
-		
-		
+
 		log.info("Building " + eid + " for user " + u.getUsername() + " is deleted");
 		return u;
 
-    }
-	
+	}
+
 	@GetMapping("/api/property/midPoint")
-    public Map<String, Double> getMidPoint(HttpServletRequest request) throws Exception {
+	public Map<String, Double> getMidPoint(HttpServletRequest request) throws Exception {
 		return getMidPoint(0, request);
 	}
-	
+
 	@GetMapping("/api/property/midPoint/{pixelWidth}")
-    public Map<String, Double> getMidPoint(@PathVariable int pixelWidth, HttpServletRequest request) throws Exception {
+	public Map<String, Double> getMidPoint(@PathVariable int pixelWidth, HttpServletRequest request) throws Exception {
 		log.info("Retrieving properties to calculate midpoint");
 		Iterable<Property> properties = propertyRepo.findByUserOrderByEidAsc((User) request.getAttribute("user"));
 		double latSum = 0;
@@ -248,25 +245,26 @@ public class PropertyController {
 		if (count > 0) {
 			mapMarker.put("lng", longSum / count);
 			mapMarker.put("lat", latSum / count);
-//			longLat[0] = longSum / count;
-//			longLat[1] = latSum / count;
+			// longLat[0] = longSum / count;
+			// longLat[1] = latSum / count;
 		} else {
 			mapMarker.put("lng", 64.7511111);
 			mapMarker.put("lat", -147.3494444);
-//			longLat[1] = 64.7511111;
-//			longLat[0] = -147.3494444;
+			// longLat[1] = 64.7511111;
+			// longLat[0] = -147.3494444;
 		}
 		// TODO calculate zoom based on long lat;
 		if (pixelWidth == 0) {
 			mapMarker.put("zoom", new Double(9));
-			//longLat[2] = 9;
+			// longLat[2] = 9;
 		} else {
 			mapMarker.put("zoom", new Double(getZoomLevel(longMax, longMin, pixelWidth)));
-			//longLat[2] = getZoomLevel(longMax, longMin, pixelWidth);
+			// longLat[2] = getZoomLevel(longMax, longMin, pixelWidth);
 			System.out.println(getZoomLevel(longMax, longMin, pixelWidth));
 		}
 		return mapMarker;
-    }	
+	}
+
 	public int getZoomLevel(double west, double east, int pixelWidth) {
 		int GLOBE_WIDTH = 256;
 		double angle = east - west;

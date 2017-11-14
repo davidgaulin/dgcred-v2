@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Loan } from '../../_models/index';
+import { FinancialInstitution } from '../../_models/index';
 import { Document } from '../../_models/index';
 import { DatePipe } from "@angular/common";
 
@@ -29,6 +30,7 @@ export class EditComponent implements OnInit {
 
   public errorMessage: string;
   public isLoading = false;
+  public isSaving = false;
   public update = false;
 
   public loanForm: FormGroup;
@@ -124,6 +126,8 @@ export class EditComponent implements OnInit {
 
   newLoan() {
     this.loan = new Loan(0, '', '', 0, '', 5, 25, 0, '', '', 300);
+    this.loan.property = this.propertyService.newBlankProperty();
+    this.loan.financialInstitution = new FinancialInstitution();
   }
 
   updateLoanForm() {
@@ -139,7 +143,7 @@ export class EditComponent implements OnInit {
       balance: [0, Validators.required],
       balanceDate: ['', Validators.required],
       renewalDate: ['', Validators.required],
-      loanCreationDate: [''],
+      loanCreationDate: ['', Validators.required],
       paymentFrequency: [''],
       financialInstitution: this._fb.group({
         eid: ['']
@@ -149,6 +153,7 @@ export class EditComponent implements OnInit {
       })
     });
   }  
+
 
   initDocument() {
     // initialize our address
@@ -163,5 +168,20 @@ export class EditComponent implements OnInit {
     this.financingService.deleteLoanDocument(this.loan.eid, deid);
     //(<FormArray>this.propertyForm.controls['documents']).removeAt(index);
     this.loan.documents.splice(index, 1);
+  }
+
+  cancel() {
+    this.router.navigate(['/financing/list']);
+  }
+
+  onSubmit(theForm: FormGroup) {
+    this.isSaving = true;
+    this.financingService.save(theForm.value).subscribe(
+      p => { },
+      e => {
+        this.errorMessage = e.message;
+        console.log(this.errorMessage);
+      },
+      () => { this.isSaving = false; this.router.navigate(['/financing/list']); });
   }
 }

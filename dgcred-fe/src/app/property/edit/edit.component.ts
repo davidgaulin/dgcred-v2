@@ -70,8 +70,6 @@ export class EditComponent implements OnInit {
     private datePipe: DatePipe,
     private authService: AuthHttpService) {
 
-    console.log("Property EDIT");
-
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
       var doc: Document = JSON.parse(response);
       this.property.documents.push(doc);
@@ -117,7 +115,7 @@ export class EditComponent implements OnInit {
       e => { this.errorMessage = e; console.log(this.errorMessage); },
       () => {
         if (!eid) {
-          this.newProperty();
+          this.property = this.propertyService.newBlankProperty();
           console.log("pathc1");
           this.propertyForm.patchValue(this.property, { onlySelf: true });
         }
@@ -156,21 +154,7 @@ export class EditComponent implements OnInit {
     this.addUnit();
   }
 
-  newProperty() {
-    let address: Address = new Address(0, '', '', '', '', '', '');
-    let unit: Unit = new Unit(0, '', 0, '', 0, '', '', '', '');
-    unit.number = '';
-    unit.area = 0;
-    unit.projectedRent = 0;
-    unit.areaUnit = this.areaUnits[0].code;
-    unit.rentPeriod = this.rentPeriods[0].code;
-    unit.bathrooms = '1';
-    unit.bedrooms = '2';
-    unit.description = ''
-    this.property = new Property(0, '', '', 0, 0, address);
-    this.property.evaluation = 0;
-    this.property.units = [unit];
-  }
+
   addUnit() {
     // add address to the list
     const control = <FormArray>this.propertyForm.controls['units'];

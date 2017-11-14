@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import * as Chartist from 'chartist';
+import * as tooltip from 'chartist-plugin-tooltip';
 import { ChartType, ChartEvent } from "ng-chartist/dist/chartist.component";
 
 import { User } from '../../_models/user';
@@ -15,8 +16,9 @@ import { MapMarker } from '../../_models/mapmarker';
 import { PropertyMapGoogle } from '../../propertymap/property-map-google.component';
 
 
-declare var require: any;
-
+//declare var require: any;
+declare function require(path: string): any;
+require('chartist-plugin-tooltip');
 const data: any = require('../../shared/data/chartist.json');
 
 export interface Chart {
@@ -71,7 +73,7 @@ export class Dashboard1Component {
         options: {
             low: 0,
             showArea: true,
-            fullWidth: true,
+            fullWidth: false,
             onlyInteger: true,
             axisY: {
                 low: 0,
@@ -175,7 +177,14 @@ export class Dashboard1Component {
         data: data['lineArea2'],
         options: {
             showArea: true,
+            showLabels: true,
             fullWidth: true,
+            plugins: [
+                Chartist.plugins.tooltip()
+            ],
+            chartPadding: {
+                left: 18
+            },
             lineSmooth: Chartist.Interpolation.none(),
             axisX: {
                 showGrid: false,
@@ -183,6 +192,15 @@ export class Dashboard1Component {
             axisY: {
                 low: 0,
                 scaleMinSpace: 50,
+                labelInterpolationFnc: function(value) {
+                    if (value >= 100000 && value < 1000000) {
+                        return (value / 1000) + 'K';
+                    } else if (value >= 1000000) {
+                        return (Math.round(value / 1000000 * 100) / 100)  + 'M';
+                    } else {
+                        return value;
+                    }
+                },
             }            
         },
         responsiveOptions: [

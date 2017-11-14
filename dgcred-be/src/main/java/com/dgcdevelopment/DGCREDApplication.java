@@ -13,7 +13,7 @@ import com.dgcdevelopment.web.filters.JwtFilter;
 
 
 @SpringBootApplication
-public class REMApplication {
+public class DGCREDApplication {
 	
 	
 	@Bean
@@ -26,7 +26,7 @@ public class REMApplication {
     }
 	
 	public static void main(String[] args) {
-		SpringApplication.run(REMApplication.class, args);
+		SpringApplication.run(DGCREDApplication.class, args);
 	}
 	
 	@Bean

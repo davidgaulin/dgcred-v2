@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Rx';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { AuthHttpService } from './auth-http.service';
 import { Property } from '../_models/index';
+import { Address } from '../_models/index';
+import { Unit } from '../_models/index';
 
 @Injectable()
 export class PropertyService {
@@ -52,9 +54,28 @@ export class PropertyService {
     delete(id: number) {
         return this.http.delete('http://localhost:8080/api/property/' + id).map((response: Response) => response.json()).catch(handleError);
     }
+
+    newBlankProperty() {
+        let address: Address = new Address(0, '', '', '', '', '', '');
+        let unit: Unit = new Unit(0, '', 0, '', 0, '', '', '', '');
+        unit.number = '';
+        unit.area = 0;
+        unit.projectedRent = 0;
+        unit.areaUnit = '0';
+        unit.rentPeriod = '0';
+        unit.bathrooms = '1';
+        unit.bedrooms = '2';
+        unit.description = ''
+        let property: Property = new Property(0, '', '', 0, 0, address);
+        property.evaluation = 0;
+        property.units = [unit];
+        return property;
+    }
 }
 
 function handleError( error: any, caugth: any) {
   let errorMsg = error.message || 'Wopidoooo!  Something is not rigth with the world.  Check again'
   return Observable.throw(errorMsg);
 }
+
+

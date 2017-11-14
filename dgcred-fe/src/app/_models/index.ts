@@ -9,3 +9,6 @@ export * from './graphserie';
 export * from './loan';
 export * from './financialInstitution';
 export * from './event'; 
+export * from './lease'; 
+export * from './tenant'; 
+export * from './telephone'; 

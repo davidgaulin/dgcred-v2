@@ -1,3 +1,256 @@
-<p>
-  edit works!
-</p>
+<div class="row">
+  <div class="col-12">
+    <p class="content-header" i18n>Lease</p>
+    <p class="content-sub-header" *ngIf="update" i18n>Update your lease.</p>
+    <p class="content-sub-header" *ngIf="!update" i18n>Add a new lease to one of your property.</p>
+  </div>
+</div>
+
+<div *ngIf="errorMessage" class="row">
+  <div class="col-lg-12 col-xs-12">
+    <div class='error'>
+      <p>ERROR ERROR ERROR TODO</p>
+      <p>
+        <a href="/login?returnUrl=/leases/list">Login Again</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="row">
+  <div class="col-lg-12 col-xs-12">
+    <div>
+      <p i18n>Loading...</p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!isLoading" class="row">
+  <div class="col-lg-12 col-md-12 col-xs-12">
+    <form novalidate="novalidate" [formGroup]="leaseForm" (ngSubmit)="onSubmit(leaseForm)">
+      <input type="hidden" id="eid" name="eid" formControlName="eid">
+
+      <!-- Details -->
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title mb-0">Lease Details</h4>
+        </div>
+        <div class="card-body">
+          <div class="px-3">
+            <div class="form-body row">
+              <label for="property" class="col-xs-12 col-lg-2 control-label" i18n>Property</label>
+              <div class="col-xs-12 col-lg-3">
+                <fieldset formGroupName="property">
+                  <select (ngModelChange)="doUnitCheck($event)" id="property" name="property" formControlName="eid" data-theme="bootstrap"
+                    data-placeholder="Choose the related property..." class="form-control select2" i18n-data-placeholder>
+                    <option *ngFor="let fi of properties" [ngValue]="fi.eid">
+                      {{ fi.name }}
+                    </option>
+                  </select>
+                </fieldset>
+              </div>
+              <div *ngIf="units != null && units.length > 1">
+                <label for="unit" class="col-xs-12 col-lg-2 control-label" i18n>Unit</label>
+                <div class="col-xs-12 col-lg-3">
+                  <fieldset formGroupName="unit">
+                    <select id="property" name="unit" formControlName="eid" data-theme="bootstrap" data-placeholder="Choose the related unit..."
+                      class="form-control select2" i18n-data-placeholder>
+                      <option *ngFor="let fi of units" [ngValue]="fi.eid">
+                        {{ fi.number }}
+                      </option>
+                    </select>
+                  </fieldset>
+                </div>
+                <div *ngIf="units != null && units.length == 1">
+                  <fieldset formGroupName="unit">
+                    <input type="hidden" id="eid" name="eid" formControlName="eid" value="{{units[0].eid}}">
+                  </fieldset>
+                </div>
+              </div>
+
+            </div>
+            <div class="form-body row">
+              <label for="rent" class="col-xs-12 col-lg-2 control-label" i18n>Rent</label>
+              <div class="col-xs-12 col-lg-3 input-group">
+                <input type="number" class="form-control" id="rent" name="rent" placeholder="" formControlName="rent">
+                <span class="input-group-addon">$</span>
+              </div>
+              <label for="rentPeriod" class="col-xs-12 col-lg-2 control-label" i18n>Rent Per</label>
+              <div class="col-xs-12 col-lg-3">
+                <select id="rentPeriod" name="unit" formControlName="rentPeriod" data-theme="bootstrap" data-placeholder="Choose the rent period..."
+                  class="form-control select2" i18n-data-placeholder>
+                  <option *ngFor="let fi of rentPeriods" [ngValue]="fi.code">
+                    {{ fi.value }}
+                  </option>
+                </select>
+
+              </div>
+            </div>
+            <div class="form-body row">
+              <label for="startDate" class="col-xs-12 col-lg-2 control-label" i18n>Start Date</label>
+              <div class="col-xs-12 col-lg-3 input-group">
+                <input type="date" id="startDate" class="form-control input-md" name="startDate" formControlName="startDate" data-toggle="tooltip"
+                  data-trigger="hover" data-placement="top" data-title="Start Date">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                </div>
+              </div>
+              <label for="length" class="col-xs-12 col-lg-2 control-label" i18n>Length</label>
+              <div class="col-xs-6 col-lg-2 input-group">
+                <input type="number" id="length" class="form-control input-md" name="length" formControlName="length" data-toggle="tooltip"
+                  data-trigger="hover" data-placement="top" data-title="length">
+              </div>
+              <div class="col-xs-6 col-lg-3 input-group">
+                <select id="lengthPeriod" name="unit" formControlName="lengthPeriod" data-theme="bootstrap" data-placeholder="Choose the length period..."
+                  class="form-control select2" i18n-data-placeholder>
+                  <option *ngFor="let fi of rentPeriods" [ngValue]="fi.code">
+                    {{ fi.value }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="button" (click)="onSubmit(this.leaseForm)" [disabled]="!leaseForm.valid" class="btn btn-primary btn-raised"
+            i18n>Save</button>
+          <button type="button" (click)="cancel()" class="btn btn-secondary " i18n>Cancel</button>
+        </div>
+      </div>
+
+      <!-- Tenants -->
+      <fieldset>
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title mb-0">Tenants</h4>
+            </div>
+            <div class="card-body">
+              <div formArrayName="tenants">
+                <div *ngFor="let tenant of leaseForm.controls.tenants.controls; let i=index" class="panel panel-default">
+                  <div class="px-3">
+                    <tenant [group]="leaseForm.controls.tenants.controls[i]"></tenant>
+                    <button *ngIf="i > 0" type="button" (click)="removeTenant(i)" class="btn btn-secondary" i18n>
+                      <i class="ft-trash-2"></i>
+                    </button>
+                  </div>
+                  <div class="px-3">
+                    <hr class="col-md-8 col-xs-8" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" (click)="onSubmit(this.leaseForm)" [disabled]="!leaseForm.valid" class="btn btn-primary btn-raised" i18n>Save</button>
+              <button type="button" (click)="addTenant()" class="btn btn-primary btn-raised" i18n>Add Tenant</button>
+              <button type="button" (click)="cancel()" class="btn btn-secondary " i18n>Cancel</button>
+            </div>
+          </div>
+        </fieldset>
+
+
+
+
+      <div *ngIf="lease != null && lease.eid && lease.documents.length > 0" class="card">
+        <div class="card-header">
+          <h4 class="card-title mb-0">Lease Documentation</h4>
+        </div>
+        <div class="card-body">
+          <div class="px-3">
+            <label for="uploadeddoc">Uploaded documents for this lease</label>
+            <ul class="list-group row">
+              <li class="list-group-item" *ngFor="let doc of lease.documents; let i = index;">
+                <button type="button" (click)="deleteDocument(i, doc.eid)" class="btn btn-secondary" i18n>
+                  <i class="ft-trash-2"></i>
+                </button>
+                <a href="http://localhost:8080/api/document/{{doc.eid}}" target="_blank">
+                  {{doc.fileName}}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-footer">
+          &nbsp;
+        </div>
+      </div>
+
+      <div *ngIf="lease != null && lease.eid" class="card">
+        <div class="card-header">
+          <h4 class="card-title mb-0">Add Lease Documentation</h4>
+        </div>
+        <div class="card-body">
+          <div class="px-3">
+            <label for="uploadeddoc">Upload any document related to this lease for reference purposes</label>
+            <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" [uploader]="uploader"
+              class="py-5 mb-3 text-center font-medium-5 text-uppercase grey my-drop-zone">
+              &nbsp;Drop New Files here
+              <br/>(pdf, doc, jpg)
+            </div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th width="50%">Name</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of uploader.queue">
+                  <td>
+                    <strong>{{ item?.file?.name }}</strong>
+                  </td>
+                  <td class="text-center">
+                    <span *ngIf="item.isSuccess">
+                      <i class="glyphicon glyphicon-ok"></i>
+                    </span>
+                    <span *ngIf="item.isCancel">
+                      <i class="glyphicon glyphicon-ban-circle"></i>
+                    </span>
+                    <span *ngIf="item.isError">
+                      <i class="glyphicon glyphicon-remove"></i>
+                    </span>
+                  </td>
+                  <td nowrap>
+                    <button type="button" class="btn btn-success btn-xs btn-raised" (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                      <span class="glyphicon glyphicon-upload"></span> Upload
+                    </button>
+                    <button type="button" class="btn btn-warning btn-xs btn-raised" (click)="item.cancel()" [disabled]="!item.isUploading">
+                      <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                    </button>
+                    <button type="button" class="btn btn-danger btn-xs btn-raised" (click)="item.remove()">
+                      <span class="glyphicon glyphicon-trash"></span> Remove
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div>
+              <div>
+                Queue progress:
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-success btn-s btn-raised" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                <span class="glyphicon glyphicon-upload"></span> Upload all
+              </button>
+              <button type="button" class="btn btn-warning btn-s btn-raised" (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+                <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+              </button>
+              <button type="button" class="btn btn-danger btn-s btn-raised" (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+                <span class="glyphicon glyphicon-trash"></span> Remove all
+              </button>
+            </div>
+            <button type="button" (click)="onSubmit(this.leaseForm)" [disabled]="!leaseForm.valid" class="btn btn-primary btn-sm btn-raised"
+              i18n>Save</button>
+            <button type="button" (click)="cancel()" class="btn btn-secondary btn-sm btn-raised" i18n>Cancel</button>
+          </div>
+        </div>
+        <div class="card-footer">
+          &nbsp;
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

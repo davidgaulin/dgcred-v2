@@ -20,6 +20,7 @@ import org.joda.time.Months;
 import com.dgcdevelopment.domain.Document;
 import com.dgcdevelopment.domain.User;
 import com.dgcdevelopment.domain.property.Property;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class Loan {
@@ -64,6 +65,7 @@ public class Loan {
 
 	private Date loanCreationDate;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	public Date getLoanCreationDate() {
 		return loanCreationDate;
 	}
@@ -80,6 +82,7 @@ public class Loan {
 		this.balance = balance;
 	}
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	public Date getBalanceDate() {
 		return balanceDate;
 	}
@@ -222,6 +225,7 @@ public class Loan {
 	private Date renewalDate;
 	private int termsInMonth;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	public Date getRenewalDate() {
 		return renewalDate;
 	}

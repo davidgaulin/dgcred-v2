@@ -19,7 +19,7 @@
       <div class="col-sm-12"  >
         <div class="card">
           <div class="card-body">
-            <div class="card-block">
+            <div class="card-block" style="overflow-x:auto">
 
               <table class="table table-responsive">
                 <thead>
@@ -37,24 +37,7 @@
                   <td colspan="1">
                       &nbsp;<button type="button" [routerLink]="['../edit']" class="btn btn-secondary btn-sm" i18n>+</button>
                   </td>
-                  <!--
-                  <td colspan="4">
-                    
-                    <div *ngIf="pagedItems && pagedItems.length > 0">
-                        <pagination [totalItems]="totalItems" 
-                                    [(ngModel)]="currentPage" 
-                                    [maxSize]="maxSize"
-                                    [boundaryLinks]="true" [rotate]="false" 
-                                    [itemsPerPage]="itemsPerPage"
-                                    (numPages)="numPages = $event"
-                                    (pageChanged)="pageChanged($event)"></pagination>
-                    </div>
-                    
-                  </td> -->
                 </tfoot>
-
-
-
                 <tbody>
                   <tr *ngIf="properties && properties.length == 0">
                     <td colspan="5" i18n> 

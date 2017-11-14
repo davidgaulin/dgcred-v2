@@ -38,8 +38,8 @@
                 <div class="card-body">
                     <div class="px-3">
                         <div class="form-body row">
-                            <label for="financialInstitution.eid" class="col-sm-2 col-md-2 control-label" i18n>Financial Instituion</label>
-                            <div class="col-md-3 col-xs-3">
+                            <label for="financialInstitution.eid" class="col-xs-12 col-lg-2 control-label" i18n>Financial Institution</label>
+                            <div class="col-xs-12 col-lg-3">
                                 <fieldset formGroupName="financialInstitution">
                                     <select id="financialInstitution.eid" name="financialInstitution.eid" formControlName="eid" data-theme="bootstrap" data-placeholder="Choose a Financial Institution..."
                                         class="form-control select2" i18n-data-placeholder>
@@ -49,15 +49,15 @@
                                     </select>
                                 </fieldset>
                             </div>
-                            <label for="amount" class="col-sm-2 col-md-2 control-label" i18n>Total Amount</label>
-                            <div class="col-md-3 col-xs-3 input-group">
+                            <label for="amount" class="col-xs-12 col-lg-2 control-label" i18n>Total Amount</label>
+                            <div class="col-xs-12 col-lg-3 input-group">
                                 <input type="number" class="form-control" id="amount" name="amount" placeholder="" formControlName="amount">
                                 <span class="input-group-addon">$</span>
                             </div>
                         </div>
                         <div class="form-body row">
-                            <label for="property" class="col-sm-2 col-md-2 control-label" i18n>Property</label>
-                            <div class="col-md-3 col-xs-3">
+                            <label for="property" class="col-xs-12 col-lg-2 control-label" i18n>Property</label>
+                            <div class="col-xs-12 col-lg-3">
                                 <fieldset formGroupName="property">
                                     <select id="property" name="property" formControlName="eid" data-theme="bootstrap" data-placeholder="Choose the related property..."
                                         class="form-control select2" i18n-data-placeholder>
@@ -67,28 +67,64 @@
                                     </select>
                                 </fieldset>
                             </div>
-                            <label for="amount" class="col-sm-2 col-md-2 control-label" i18n>Interest Rate</label>
-                            <div class="col-md-3 col-xs-3 input-group">
+                            <label for="amount" class="col-xs-12 col-lg-2 control-label" i18n>Interest Rate</label>
+                            <div class="col-xs-12 col-lg-3 input-group">
                                 <input type="number" class="form-control" id="interestRate" name="interestRate" placeholder="" formControlName="interestRate">
                                 <span class="input-group-addon">%</span>
                             </div>
                         </div>
                         <div class="form-body row">
-                            <label for="Payment Frequency" class="col-sm-2 col-md-2 control-label" i18n>Payment Frequency</label>
-                            <div class="col-md-3 col-xs-3">
+                            <label for="Payment Frequency" class="col-xs-12 col-lg-2 control-label" i18n>Payment Frequency</label>
+                            <div class="col-xs-12 col-lg-3 input-group">
                                 <select id="paymentFrequency" name="paymentFrequency" formControlName="paymentFrequency" data-theme="bootstrap" data-placeholder="Choose the payment frequency..."
                                     class="form-control select2" i18n-data-placeholder>
-                                    <option *ngFor="let fi of paymentFrequencies" [ngValue]="fi.eid">
-                                        {{ fi.name }}
+                                    <option *ngFor="let pf of paymentFrequencies" [ngValue]="pf.code">
+                                        {{ pf.value }}
                                     </option>
                                 </select>
                             </div>
-                            <label for="amount" class="col-sm-2 col-md-2 control-label" i18n>Interest Rate</label>
-                            <div class="col-md-3 col-xs-3 input-group">
+                            <label for="amount" class="col-xs-12 col-lg-2 control-label" i18n>Interest Rate</label>
+                            <div class="col-xs-12 col-lg-3 input-group">
                                 <input type="number" class="form-control" id="interestRate" name="interestRate" placeholder="" formControlName="interestRate">
                                 <span class="input-group-addon">%</span>
                             </div>
                         </div>
+                        <div class="form-body row">
+                            <label for="amortization" class="col-xs-12 col-lg-2 control-label" i18n>Amortization</label>
+                            <div class="col-xs-12 col-lg-3 input-group">
+                                <input type="number" class="form-control" id="amortization" name="amortization" placeholder="" formControlName="amortization"> years
+                            </div>
+                            <label for="loanCreationDate" class="col-xs-12 col-lg-2 control-label" i18n>Opening Date</label>
+                            <div class="col-xs-12 col-lg-3 input-group">
+                                <input type="date" id="loanCreationDate" class="form-control input-md" name="loanCreationDate" formControlName="loanCreationDate" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Opening Date">
+                                <div class="input-group-addon">
+                                  <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-body row">
+                            <label for="balance" class="col-xs-12 col-lg-2 control-label" i18n>Last Known Balance</label>
+                            <div class="col-xs-12 col-lg-3 input-group">
+                                <input type="number" class="form-control" id="balance" name="balance" placeholder="" formControlName="balance">
+                                <span class="input-group-addon">$</span>
+                            </div>
+                            <label for="balanceDate" class="col-xs-12 col-lg-2 control-label" i18n>Last Known Balance Date</label>
+                            <div class="col-xs-12 col-lg-3 input-group">
+                                <input type="date" id="balanceDate" class="form-control input-md" name="balanceDate" formControlName="balanceDate" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Balance Date">
+                                <div class="input-group-addon">
+                                  <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="form-body row">
+                            <label for="renewalDate" class="col-xs-12 col-lg-2 control-label" i18n>Renewal Date</label>
+                            <div class="col-xs-12 col-lg-3 input-group">
+                                <input type="date" id="renewalDate" class="form-control input-md" name="renewalDate" formControlName="renewalDate" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Renewal Date">
+                                <div class="input-group-addon">
+                                  <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                                </div>
+                            </div>
+                        </div>                                                                       
                     </div>
                 </div>
 
@@ -123,7 +159,7 @@
 
             <div *ngIf="loan != null && loan.eid" class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0">Add Documentation</h4>
+                    <h4 class="card-title mb-0">Add Mortgage Documentation</h4>
                 </div>
                 <div class="card-body">
                     <div class="px-3">

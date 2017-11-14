@@ -21,6 +21,7 @@ import com.dgcdevelopment.domain.User;
 import com.dgcdevelopment.domain.exceptions.MissingEntityException;
 import com.dgcdevelopment.domain.lease.Lease;
 import com.dgcdevelopment.domain.lease.LeaseRepository;
+import com.dgcdevelopment.domain.lease.Tenant;
 
 @RestController
 @CrossOrigin
@@ -30,7 +31,7 @@ public class LeaseController {
 
 	@Autowired
 	private DocumentRepository documentRepo;
-	
+
 	@Autowired
 	private LeaseRepository leaseRepo;
 
@@ -42,7 +43,7 @@ public class LeaseController {
 		log.info("Retrieve all leases completed");
 		return leases;
 	}
-	
+
 	@GetMapping("/api/lease/active")
 	public Iterable<Lease> getActiveLeases(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		User u = (User) request.getAttribute("user");
@@ -71,13 +72,21 @@ public class LeaseController {
 
 	@PostMapping("/api/lease")
 	public Lease saveLease(HttpServletRequest request, @RequestBody Lease lease) throws Exception {
-		
+
 		log.info("Saving Lease : " + lease.getUnit().getNumber());
 		lease.setUser((User) request.getAttribute("user"));
 
 		// Grab the document and put them in
-		if (lease.getEid() != null) {
-			lease.setDocuments(leaseRepo.findOne(lease.getEid()).getDocuments());
+		if (lease.getEid() != null && lease.getEid() > 0) {
+			System.out.println(lease.getEid());
+			Lease tmpP = leaseRepo.findOne(lease.getEid());
+			if (tmpP != null) {
+				lease.setDocuments(tmpP.getDocuments());
+			}
+		}
+
+		for (Tenant t : lease.getTenants()) {
+			t.setUser((User) request.getAttribute("user"));
 		}
 
 		// Save the lease
@@ -134,12 +143,12 @@ public class LeaseController {
 	public User deleteOneLease(HttpServletRequest request, @PathVariable("eid") long eid) throws Exception {
 		User u = (User) request.getAttribute("user");
 		log.info("Deleting lease eid: " + eid + " User: " + u.getUsername());
-		
+
 		leaseRepo.deleteByEidAndUser(eid, u);
 		log.info("Lease " + eid + " for user " + u.getUsername() + " is  deleted");
 		return u;
 	}
-	
+
 	@GetMapping("/api/lease/inactivate/{eid}")
 	@Transactional
 	public User markAsInactive(HttpServletRequest request, @PathVariable("eid") long eid) throws Exception {
@@ -147,9 +156,9 @@ public class LeaseController {
 		log.info("Deleting lease eid: " + eid + " User: " + u.getUsername());
 		Lease l = leaseRepo.findOneByUserAndEid(u, eid);
 		l.setActive(false);
-		leaseRepo.save(l);		
+		leaseRepo.save(l);
 		log.info("Lease " + eid + " for user " + u.getUsername() + " is  marked inactive.");
 		return u;
 	}
-	
+
 }

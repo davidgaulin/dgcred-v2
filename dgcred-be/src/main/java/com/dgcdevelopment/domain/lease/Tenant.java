@@ -21,100 +21,131 @@ import com.dgcdevelopment.domain.User;
 
 @Entity
 public class Tenant {
-	
+
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long eid;
-	
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long eid;
+
 	public Long getEid() {
 		return eid;
 	}
+
 	public void setEid(Long eid) {
 		this.eid = eid;
 	}
+
 	public String getFirstName() {
 		return firstName;
 	}
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
 	public String getLastName() {
 		return lastName;
 	}
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 	public Date getBirthday() {
 		return birthday;
 	}
+
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
+
 	public Address getPreviousAddress() {
 		return previousAddress;
 	}
+
 	public void setPreviousAddress(Address previousAddress) {
 		this.previousAddress = previousAddress;
 	}
+
 	public String getSinSsn() {
 		return sinSsn;
 	}
+
 	public void setSinSsn(String sinSsn) {
 		this.sinSsn = sinSsn;
 	}
+
 	public Document getPicture() {
 		return picture;
 	}
+
 	public void setPicture(Document picture) {
 		this.picture = picture;
 	}
+
 	private String firstName;
 	private String lastName;
-	
-	@OneToMany(cascade=CascadeType.ALL)
-	private Set<Telephone> telephones = new HashSet<>();	
-	
+
+	@OneToMany(cascade = CascadeType.ALL)
+	private Set<Telephone> telephones = new HashSet<>();
+
+	// TODO get rid of the one phone to use all phones
+	private String telephone;
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
 	public Set<Telephone> getTelephones() {
 		return telephones;
 	}
+
 	public void setTelephones(Set<Telephone> telephones) {
 		this.telephones = telephones;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	private String email;
 	private Date birthday;
-	
-	@OneToOne(cascade=CascadeType.ALL)
+
+	@OneToOne(cascade = CascadeType.ALL)
 	private Address previousAddress;
-	
+
 	private String sinSsn;
-	
-	@OneToOne(cascade=CascadeType.DETACH)
-	private Document picture;		
+
+	@OneToOne(cascade = CascadeType.DETACH)
+	private Document picture;
 
 	public User getUser() {
 		return user;
 	}
+
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	@ManyToOne(fetch=FetchType.EAGER, optional=false)
+
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	private User user;
 
-	@OneToMany(cascade=CascadeType.DETACH)
+	@OneToMany(cascade = CascadeType.DETACH)
 	private Set<Document> documents = new HashSet<>();
 
 	public Set<Document> getDocuments() {
 		return documents;
 	}
+
 	public void setDocuments(Set<Document> documents) {
 		this.documents = documents;
 	}
-	
+
 }

@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dgcdevelopment.domain.Document;
+import com.dgcdevelopment.domain.DocumentRepository;
 import com.dgcdevelopment.domain.User;
 import com.dgcdevelopment.domain.exceptions.MissingEntityException;
 import com.dgcdevelopment.domain.financing.Loan;
+import com.dgcdevelopment.domain.financing.LoanRepository;
 
 
 @RestController
@@ -29,7 +32,10 @@ public class LoanController {
 	private final Logger log = LoggerFactory.getLogger(this.getClass()); 
 	
 	@Autowired
-	private com.dgcdevelopment.domain.financing.LoanRepository loanRepo;
+	private LoanRepository loanRepo;
+
+	@Autowired
+	private DocumentRepository documentRepo;
 	
 	@GetMapping("/api/loan")
     public Iterable<Loan> getLoans(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -41,6 +47,29 @@ public class LoanController {
 		
 		return loans;
     }
+	
+	@GetMapping("/api/loan/addDocument/{leid}/{deid}")
+    public Loan updatePropertyDoc(HttpServletRequest request, 
+    		@PathVariable Long deid, @PathVariable Long leid) throws Exception {
+		log.info("Attaching doc: " + deid + " to property: " + leid + "...");
+		Loan l = loanRepo.findOneByUserAndEid((User) request.getAttribute("user"), leid);
+		boolean found = false;
+		for (Document doc : l.getDocuments()) {
+			if (doc.getEid().equals(deid)) {
+				found = true;
+			}
+		}
+		
+		if (!found) {
+			Document d = documentRepo.findOneByUserAndEid((User) request.getAttribute("user"), deid);
+			if (d != null && d.getEid() != null) {
+				l.getDocuments().add(d);
+				loanRepo.save(l);
+			}
+		}
+		log.info("Doc: " + deid + " attached to loan: " + leid + "...");
+		return l;
+    }	
 	
 	@GetMapping("/api/loan/{eid}")
     public Loan getLoan(@PathVariable Long eid, HttpServletRequest request, HttpServletResponse response) throws Exception {

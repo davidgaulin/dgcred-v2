@@ -1,3 +1,91 @@
-<p>
-  list works!
-</p>
+<div class="row">
+  <div class="col-12">
+    <div class="content-header" i18n>Leases</div>
+    <p class="content-sub-header" i18n>List of your current leases.</p>
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="row">
+    <div class="col-lg-12 col-xs-12">
+      <div>
+        <p i18n>Loading...</p>
+      </div>
+    </div>
+  </div>
+
+<section id="extended">
+  <div class="row" *ngIf="!isLoading">
+
+    <section *ngIf="errorMessage">
+      <div class='error'>
+        <p>{{ errorMessage }}</p>
+        <p>
+          <a href="/login?returnUrl=/leases/list">Login Again</a>
+        </p>
+      </div>
+    </section>
+
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-block row">
+            <table class="table table-responsive ">
+              <thead>
+                <tr>
+                  <th i18n>Tenant</th>
+                  <th i18n>Start Date</th>
+                  <th i18n>Renewal Date</th>
+                  <th i18n>Rent</th>
+                  <th i18n></th>
+                </tr>
+              </thead>
+
+              <tfoot>
+                <td colspan="5"></td>
+                <td colspan="1">
+                  <button type="button" [routerLink]="['../edit']" class="btn btn-secondary btn-sm" i18n>Add</button>
+                </td>
+              </tfoot>
+
+              <tbody>
+                <tr *ngIf="leases && leases.length == 0">
+                  <td colspan="6" i18n>
+                    You don't have any lease in the system. Click the
+                    <button type="button" [routerLink]="['../edit']" class="btn btn-secondary btn-sm" i18n>Add</button>
+                    button to start your journey.
+                  </td>
+                </tr>
+                <tr *ngFor="let l of leases">
+                  <td>
+                    <a routerLink="../edit/{{l.eid}}">
+                      <span *ngFor="let tenant of l.tenants; let isLast=last">
+                        {{tenant.firstName}} {{tenant.lastName}}
+                        <span *ngIf="tenant.companyName !=null">
+                            - {{tenant.companyName}}
+                        </span>
+                        {{isLast ? '' : ', '}}
+                      </span>
+                    </a>
+                  </td>
+                  <td>
+                    <a routerLink="../edit/{{l.eid}}">{{l.startDate}}</a>
+                  </td>
+                  <td>
+                  </td>
+                  <td>
+                    <a routerLink="../edit/{{l.eid}}">{{l.rent | number:'.2-2' }}</a>
+                  </td>
+                  <td>
+                    <button type="button" (click)="delete( l.eid )" class="btn btn-secondary btn-sm" i18n>
+                      <i class="ft-trash-2"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PreRemove;
 import javax.persistence.Transient;
 
@@ -26,6 +27,7 @@ import com.dgcdevelopment.domain.RentPeriod;
 import com.dgcdevelopment.domain.User;
 import com.dgcdevelopment.domain.property.Property;
 import com.dgcdevelopment.domain.property.Unit;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class Lease {
@@ -38,10 +40,9 @@ public class Lease {
 	private Long eid;
 
 	private boolean active = true;
-	
+
 	private LeaseRenewalOption leaseRenewalOption = LeaseRenewalOption.FULL_LENGTH;
-	
-	
+
 	public LeaseRenewalOption getLeaseRenewalOption() {
 		return leaseRenewalOption;
 	}
@@ -58,6 +59,7 @@ public class Lease {
 		this.active = active;
 	}
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date startDate;
 
 	private int duration = 12;
@@ -97,14 +99,14 @@ public class Lease {
 	public void setTenants(Set<Tenant> tenants) {
 		this.tenants = tenants;
 	}
-	
+
 	public void addTenant(Tenant tenant) {
 		if (this.tenants == null) {
 			this.tenants = new HashSet<>();
 		}
 		this.tenants.add(tenant);
 	}
-	
+
 	public void addTenants(Set<Tenant> tenants) {
 		if (this.tenants == null) {
 			this.tenants = new HashSet<>();
@@ -124,10 +126,10 @@ public class Lease {
 
 	private RentPeriod durationUnit = RentPeriod.MONTHS;
 
-	@ManyToOne(cascade = CascadeType.DETACH)
+	@OneToOne(cascade = CascadeType.DETACH)
 	private Unit unit;
 
-	@OneToMany(cascade = CascadeType.DETACH)
+	@OneToMany(cascade = CascadeType.ALL)
 	private Set<Tenant> tenants = new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.DETACH)
@@ -232,7 +234,7 @@ public class Lease {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<LeaseRate> rates = new ArrayList<>();
 
@@ -243,10 +245,9 @@ public class Lease {
 	public void setRates(List<LeaseRate> rates) {
 		this.rates = rates;
 	}
-	
+
 	@ManyToOne(cascade = CascadeType.DETACH)
 	private Property property;
-
 
 	public int getTerminationNoticeLength() {
 		return terminationNoticeLength;
@@ -267,5 +268,24 @@ public class Lease {
 	public void setTerminationNoticePeriod(RentPeriod terminationNoticePeriod) {
 		this.terminationNoticePeriod = terminationNoticePeriod;
 	}
-	
+
+	private double rent;
+	private String rentPeriod;
+
+	public String getRentPeriod() {
+		return rentPeriod;
+	}
+
+	public void setRentPeriod(String rentPeriod) {
+		this.rentPeriod = rentPeriod;
+	}
+
+	public double getRent() {
+		return rent;
+	}
+
+	public void setRent(double rent) {
+		this.rent = rent;
+	}
+
 }
