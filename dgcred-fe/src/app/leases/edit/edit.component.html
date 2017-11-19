@@ -49,24 +49,24 @@
                   </select>
                 </fieldset>
               </div>
-              <div *ngIf="units != null && units.length > 1">
-                <label for="unit" class="col-xs-12 col-lg-2 control-label" i18n>Unit</label>
-                <div class="col-xs-12 col-lg-3">
-                  <fieldset formGroupName="unit">
-                    <select id="property" name="unit" formControlName="eid" data-theme="bootstrap" data-placeholder="Choose the related unit..."
-                      class="form-control select2" i18n-data-placeholder>
-                      <option *ngFor="let fi of units" [ngValue]="fi.eid">
-                        {{ fi.number }}
-                      </option>
-                    </select>
-                  </fieldset>
-                </div>
-                <div *ngIf="units != null && units.length == 1">
-                  <fieldset formGroupName="unit">
-                    <input type="hidden" id="eid" name="eid" formControlName="eid" value="{{units[0].eid}}">
-                  </fieldset>
-                </div>
+              <!-- TODO Figure out why we can't wrap this into one div and have only one condition -->
+              <label *ngIf="units != null && units.length > 1" for="unit" class="col-xs-12 col-lg-2 control-label" i18n>Unit</label>
+              <div class="col-xs-12 col-lg-3" *ngIf="units != null && units.length > 1">
+                <fieldset formGroupName="unit">
+                  <select id="property" name="unit" formControlName="eid" data-theme="bootstrap" data-placeholder="Choose the related unit..."
+                    class="form-control select2" i18n-data-placeholder>
+                    <option *ngFor="let fi of units" [ngValue]="fi.eid">
+                      {{ fi.number }}
+                    </option>
+                  </select>
+                </fieldset>
               </div>
+              <div *ngIf="units != null && units.length == 1">
+                <fieldset formGroupName="unit">
+                  <input type="hidden" id="eid" name="eid" formControlName="eid" value="{{units[0].eid}}">
+                </fieldset>
+              </div>
+                
 
             </div>
             <div class="form-body row">
@@ -109,6 +109,12 @@
                 </select>
               </div>
             </div>
+            <div class="form-body row">
+              <label for="autoRenew" class="col-xs-12 col-lg-2 control-label" i18n>Auto Renew</label>
+              <div class="col-xs-12 col-lg-3 input-group">
+                <input type="checkbox" id="autoRenew" class="form-control input-md" name="autoRenew" formControlName="autoRenew"  data-title="AutoRenew">
+              </div>
+            </div>            
           </div>
         </div>
         <div class="card-footer">
