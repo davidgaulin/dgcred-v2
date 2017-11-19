@@ -3,12 +3,14 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
 
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class AuthenticationService {
     constructor(private http: Http) {  console.log("Authenticate Service constructor"); }
 
     login(username: string, password: string) {
-        return this.http.post('http://localhost:8080/login', JSON.stringify({ username: username, password: password }))
+        return this.http.post(environment.registerApiUrl + '/login', JSON.stringify({ username: username, password: password }))
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();
@@ -20,7 +22,7 @@ export class AuthenticationService {
     }
 
    register(username: string, password: string, fullname: string) {
-        return this.http.post('http://localhost:8080/register', JSON.stringify({ username: username, password: password, fullname: fullname }))
+        return this.http.post(environment.registerApiUrl + '/register', JSON.stringify({ username: username, password: password, fullname: fullname }))
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();

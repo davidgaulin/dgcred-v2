@@ -7,6 +7,7 @@ import { Property } from '../../_models/index';
 import { Unit } from '../../_models/index';
 import { DatePipe } from "@angular/common";
 
+import { environment } from '../../../environments/environment';
 import { AuthHttpService } from '../../_services/index';
 import { LeaseService } from '../../_services/index';
 import { LookupService } from '../../_services/index';
@@ -53,7 +54,7 @@ export class EditComponent implements OnInit {
   }
 
   public uploader: FileUploader = new FileUploader({
-    url: 'http://localhost:8080/api/document',
+    url: environment.apiUrl + '/document',
     authToken: 'Bearer ' + this.authService.jwtString()
   });
 

@@ -5,12 +5,14 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { AuthHttpService } from './auth-http.service';
 import { Property } from '../_models/index';
 
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class LoanService {
     constructor(public http: AuthHttpService) { }
 
     getLoanForPropertyEid(propertyEid: number) {
-        return this.http.get('http://localhost:8080/api/loan/property/' + propertyEid).map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/loan/property/' + propertyEid).map((response: Response) => response.json()).catch(handleError);
     }
 }
 function handleError( error: any, caugth: any) {

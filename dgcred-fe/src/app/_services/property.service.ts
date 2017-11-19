@@ -7,25 +7,27 @@ import { Property } from '../_models/index';
 import { Address } from '../_models/index';
 import { Unit } from '../_models/index';
 
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class PropertyService {
     constructor(public http: AuthHttpService) { }
 
     getCount() {
-        return this.http.get('http://localhost:8080/api/property/count').map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/property/count').map((response: Response) => response.json()).catch(handleError);
     }
 
     getMidPoint() {
-        return this.http.get('http://localhost:8080/api/property/midPoint').map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/property/midPoint').map((response: Response) => response.json()).catch(handleError);
     }
 
     deleteDocument(peid: number, deid: number) {
-        return this.http.get('http://localhost:8080/api/property/deleteDocument/' + peid + '/' + deid).map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/property/deleteDocument/' + peid + '/' + deid).map((response: Response) => response.json()).catch(handleError);
     }
 
     addDocument(peid: number, deid: number) {
         console.log("peid: " + peid + " deid: " + deid);
-        return this.http.get('http://localhost:8080/api/property/addDocument/' + peid + '/' + deid).map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/property/addDocument/' + peid + '/' + deid).map((response: Response) => response.json()).catch(handleError);
     }
 
 
@@ -33,26 +35,26 @@ export class PropertyService {
         // TODO REMOVE
         let b: Property;
         b = new Property(0, '3', 'put test');
-        let a = this.http.put('http://localhost:8080/api/property/put', b).map((response: Response) => response.json()).catch(handleError);
+        let a = this.http.put(environment.apiUrl + '/property/put', b).map((response: Response) => response.json()).catch(handleError);
         // TODO END
 
-        return this.http.get('http://localhost:8080/api/property').map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/property').map((response: Response) => response.json()).catch(handleError);
     }
 
     getRange(start: number, count: number) {
-        return this.http.get('http://localhost:8080/api/property/range/' + start + '/' + count).map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/property/range/' + start + '/' + count).map((response: Response) => response.json()).catch(handleError);
     }    
 
     getByEid(eid: number) {
-        return this.http.get('http://localhost:8080/api/property/' + eid).map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/property/' + eid).map((response: Response) => response.json()).catch(handleError);
     }
 
     save(property: Property) {
-        return this.http.post('http://localhost:8080/api/property', property).map((response: Response) => response.json()).catch(handleError);
+        return this.http.post(environment.apiUrl + '/property', property).map((response: Response) => response.json()).catch(handleError);
     }
 
     delete(id: number) {
-        return this.http.delete('http://localhost:8080/api/property/' + id).map((response: Response) => response.json()).catch(handleError);
+        return this.http.delete(environment.apiUrl + '/property/' + id).map((response: Response) => response.json()).catch(handleError);
     }
 
     newBlankProperty() {

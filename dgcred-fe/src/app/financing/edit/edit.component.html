@@ -90,9 +90,9 @@
                             </div>
                         </div>
                         <div class="form-body row">
-                            <label for="amortization" class="col-xs-12 col-lg-2 control-label" i18n>Amortization</label>
+                            <label for="amortization" class="col-xs-12 col-lg-2 control-label" i18n>Amortization (Years)</label>
                             <div class="col-xs-12 col-lg-3 input-group">
-                                <input type="number" class="form-control" id="amortization" name="amortization" placeholder="" formControlName="amortization"> years
+                                <input type="number" class="form-control" id="amortization" name="amortization" placeholder="" formControlName="amortization">
                             </div>
                             <label for="loanCreationDate" class="col-xs-12 col-lg-2 control-label" i18n>Opening Date</label>
                             <div class="col-xs-12 col-lg-3 input-group">
@@ -145,7 +145,7 @@
                                 <button type="button" (click)="deleteDocument(i, doc.eid)" class="btn btn-secondary" i18n>
                                     <i class="ft-trash-2"></i>
                                 </button>
-                                <a href="http://localhost:8080/api/document/{{doc.eid}}" target="_blank">
+                                <a href="{{ environment.apiUrl }}/document/{{doc.eid}}" target="_blank">
                                     {{doc.fileName}}
                                 </a>
                             </li>

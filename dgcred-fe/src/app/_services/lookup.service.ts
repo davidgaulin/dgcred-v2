@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Rx';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { AuthHttpService } from './auth-http.service';
 
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class LookupService {
     constructor(public http: AuthHttpService) { }
@@ -94,11 +96,11 @@ export class LookupService {
 
     getFinancialInstitutions(): any {
         // ARGS -- Useless but required ---
-        let a = this.http.put('http://localhost:8080/api/property/put', { "name": "test" }).map((response: Response) => response.json()).catch(handleError);
+        let a = this.http.put(environment.apiUrl + '/property/put', { "name": "test" }).map((response: Response) => response.json()).catch(handleError);
         // ARGS -- Useless but required ---
 
         if (!this.lookups) {
-            this.financialInstitutions = this.http.get('http://localhost:8080/api/lookup/financialInstitutions')
+            this.financialInstitutions = this.http.get(environment.apiUrl + '/lookup/financialInstitutions')
                 .map((response: Response) => response.json()).catch(handleError);
         }
         console.log(this.financialInstitutions);
@@ -107,11 +109,11 @@ export class LookupService {
 
     getAll() {
         // ARGS -- Useless but required ---
-        let a = this.http.put('http://localhost:8080/api/property/put', { "name": "test" }).map((response: Response) => response.json()).catch(handleError);
+        let a = this.http.put(environment.apiUrl + '/property/put', { "name": "test" }).map((response: Response) => response.json()).catch(handleError);
         // ARGS -- Useless but required ---
 
         if (!this.lookups) {
-            this.lookups = this.http.get('http://localhost:8080/api/lookups')
+            this.lookups = this.http.get(environment.apiUrl + '/lookups')
                 .map((response: Response) => response.json()).catch(handleError);
         }
         console.log(this.lookups);

@@ -5,37 +5,39 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { AuthHttpService } from './auth-http.service';
 import { Loan } from '../_models/index';
 
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class FinancingService {
     constructor(public http: AuthHttpService) { }
 
     getAllLoans() {
-        return this.http.get('http://localhost:8080/api/loan').map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/loan').map((response: Response) => response.json()).catch(handleError);
     }
 
     getLoanCount() {
-        return this.http.get('http://localhost:8080/api/loan/count').map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/loan/count').map((response: Response) => response.json()).catch(handleError);
     }
 
     deleteLoanDocument(leid: number, deid: number) {
-        return this.http.get('http://localhost:8080/api/loan/deleteDocument/' + leid + '/' + deid).map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/loan/deleteDocument/' + leid + '/' + deid).map((response: Response) => response.json()).catch(handleError);
     }
 
     addLoanDocument(leid: number, deid: number) {
         console.log("peid: " + leid + " deid: " + deid);
-        return this.http.get('http://localhost:8080/api/loan/addDocument/' + leid + '/' + deid).map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/loan/addDocument/' + leid + '/' + deid).map((response: Response) => response.json()).catch(handleError);
     }
 
     getByEid(eid: number) {
-        return this.http.get('http://localhost:8080/api/loan/' + eid).map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/loan/' + eid).map((response: Response) => response.json()).catch(handleError);
     }
 
     save(loan: Loan) {
-        return this.http.post('http://localhost:8080/api/loan', loan).map((response: Response) => response.json()).catch(handleError);
+        return this.http.post(environment.apiUrl + '/loan', loan).map((response: Response) => response.json()).catch(handleError);
     }
 
     delete(id: number) {
-        return this.http.delete('http://localhost:8080/api/loan/' + id).map((response: Response) => response.json()).catch(handleError);
+        return this.http.delete(environment.apiUrl + '/loan/' + id).map((response: Response) => response.json()).catch(handleError);
     }
 }
 

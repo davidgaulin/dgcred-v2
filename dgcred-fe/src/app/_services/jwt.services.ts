@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Rx';
 
 import { User } from '../_models/index';
 
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class JWTService {
 

@@ -9,6 +9,7 @@ import { AuthHttpService } from '../../_services/index';
 import { FinancingService } from '../../_services/index';
 import { LookupService } from '../../_services/index';
 import { PropertyService } from '../../_services/index';
+import { environment } from '../../../environments/environment';
 
 import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload';
 
@@ -48,7 +49,7 @@ export class EditComponent implements OnInit {
   }
 
   public uploader: FileUploader = new FileUploader({
-    url: 'http://localhost:8080/api/document',
+    url: environment.apiUrl + '/document',
     authToken: 'Bearer ' + this.authService.jwtString()
   });  
 

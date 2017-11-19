@@ -4,12 +4,14 @@ import { AuthHttpService } from './auth-http.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
 
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class RateHubService {
     constructor(public http: AuthHttpService) { }
 
     getRate(years: number) {
-        return this.http.get('http://localhost:8080/api/rates/fixed/' + years + '/years')
+        return this.http.get(environment.apiUrl + '/rates/fixed/' + years + '/years')
             .map((response: Response) => response.json()).catch(handleError);
     }
 }

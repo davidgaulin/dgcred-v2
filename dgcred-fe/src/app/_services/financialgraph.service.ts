@@ -4,15 +4,17 @@ import { Observable } from 'rxjs/Rx';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { AuthHttpService } from './auth-http.service';
 
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class FinancialGraphService {
     constructor(public http: AuthHttpService) { }
 
     getLoansBalancePrevision(start: number, end: number) {
-        return this.http.get('http://localhost:8080/api/fg/loanbalance/previsions/years/' + start + '/' + end).map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/fg/loanbalance/previsions/years/' + start + '/' + end).map((response: Response) => response.json()).catch(handleError);
     }
     getLoanValueCapitalPrevision(start: number, end: number) {
-        return this.http.get('http://localhost:8080/api/fg/overview/loan/value/capital/previsions/years/' + start + '/' + end).map((response: Response) => response.json()).catch(handleError);
+        return this.http.get(environment.apiUrl + '/fg/overview/loan/value/capital/previsions/years/' + start + '/' + end).map((response: Response) => response.json()).catch(handleError);
     }
 }
 function handleError( error: any, caugth: any) {
