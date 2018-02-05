@@ -3,25 +3,10 @@ import { RouteInfo } from './sidebar.metadata';
 //Sidebar menu Routes and data
 export const ROUTES: RouteInfo[] = [
 
-    { path: '/dashboard/dashboard1', title: 'Dashboard', icon: 'ft-activity', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-    {
-        path: '', title: 'Properties', icon: 'ft-home', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, submenu: [
-            { path: '/property/list', title: 'Existing Properties', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/property/edit', title: 'Add New Property', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-        ]
-    },
-    {
-        path: '', title: 'Financing', icon: 'ft-clipboard', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, submenu: [
-            { path: '/financing/list', title: 'Existing Mortgages', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/financing/edit', title: 'Add a New Mortgage', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-        ]
-    },
-    {
-        path: '', title: 'Leases', icon: 'ft-clipboard', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, submenu: [
-            { path: '/leases/list', title: 'Existing Leases', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/leases/edit', title: 'Add a New Leases', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-        ]
-    },
+    { path: '/dashboard/dashboard1', title: 'Dashboard',  icon: 'ft-activity',  class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+    { path: '/property/list',        title: 'Properties', icon: 'ft-home',      class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+    { path: '/financing/list',       title: 'Financing',  icon: 'ft-percent',   class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+    { path: '/leases/list',          title: 'Leases',     icon: 'ft-clipboard', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
     { path: '/colorpalettes', title: 'Color Palette', icon: 'ft-droplet', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
     { path: '/inbox', title: 'Inbox', icon: 'ft-mail', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
     { path: '/chat', title: 'Chat', icon: 'ft-message-square', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },

@@ -43,12 +43,12 @@
 		<div class="card">
 			<div class="card-header">
 				<div class="row">
-					<div class="col-11">
+					<div class="col-10">
 						<h4 class="card-title">Canadian Rates - {{user.preferences['dashboard.canadianrate.years']}} years fixed</h4>
 					</div>
-					<div class="col-2 text-right">
-						<ul class="navbar-nav">
-							<li class="nav-item" ngbDropdown placement="top-left">
+					<div class="col-2 text-xs-righ">
+						<ul class="navbar-nav" style="position: absolute; z-index: 2000;">
+							<li class="nav-item" ngbDropdown placement="bottom-right">
 								<a class="nav-link position-relative" id="canadianRateSetting" ngbDropdownToggle>
 									<i class="ft-settings font-small-2 blue-grey darken-4"></i>
 									<p class="d-none">Settings</p>
@@ -63,24 +63,12 @@
 							</li>
 						</ul>
 					</div>
-
-
-
-
-
-
-
-
-
-
-
-				
 				</div>
 			</div>
-			<div class="card-body">
-				<table class="table table-striped">
-					<tbody style="height: 250px; overflow-y: auto; overflow-x: hidden;">
-					<tr *ngFor="let rate of rates">
+			<div class="card-body" style="height: 361px;">
+				<table class="table table-striped rateTable">
+					<tbody class="rateTableTbody">
+					<tr *ngFor="let rate of rates" class="rateTableTr">
 						<td><a href="{{rate.href}}">{{rate.value}}%</a></td>
 						<td><a href="{{rate.href}}"><img src="{{rate.provider.logo}}" alt="{{rate.provider.name}}" width="25" height="25" /></a></td>
 						<td><a href="{{rate.href}}">{{rate.provider.name}}</a></td>

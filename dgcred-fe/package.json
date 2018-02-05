@@ -23,7 +23,7 @@
     "@angular/platform-browser": "^4.4.4",
     "@angular/platform-browser-dynamic": "^4.4.4",
     "@angular/router": "^4.4.4",
-    "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.5",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-beta.5",
     "@swimlane/ngx-charts": "^6.0.2",
     "@swimlane/ngx-datatable": "^10.2.3",
     "@types/chartist": "^0.9.36",

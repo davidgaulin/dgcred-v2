@@ -39,13 +39,13 @@ export class Dashboard1Component {
 
     public isLoading = false;
     public user: User;
-    public canadianRateYears: string[] = ["5","4","3","2","1"];
+    public canadianRateYears: string[] = ["5", "4", "3", "2", "1"];
 
     public rates: any;
 
     public month: any;
     public year: any;
-    
+
     public errorMessage: string;
 
     public loanBalancePrev: GraphSerie[];
@@ -57,12 +57,12 @@ export class Dashboard1Component {
     public propertyMidPoint: MapMarker = new MapMarker();
     public midPoint: MapMarker;
 
-    public properties: Array<any>; 
-    public markers: MapMarker[] = [];    
+    public properties: Array<any>;
+    public markers: MapMarker[] = [];
 
-    public lineColors: string[] = ['#88C4EE', '#ccc', '#660066', '#0066ff', '#00ffff', 
-                                   '#ff0000', '#800000', '#ff3399', '#ff9933', '#9933ff',
-                                   '#666699', '#006666', '#333300', '#003366', '#ffff66' ]    
+    public lineColors: string[] = ['#88C4EE', '#ccc', '#660066', '#0066ff', '#00ffff',
+        '#ff0000', '#800000', '#ff3399', '#ff9933', '#9933ff',
+        '#666699', '#006666', '#333300', '#003366', '#ffff66']
 
 
 
@@ -192,16 +192,16 @@ export class Dashboard1Component {
             axisY: {
                 low: 0,
                 scaleMinSpace: 50,
-                labelInterpolationFnc: function(value) {
+                labelInterpolationFnc: function (value) {
                     if (value >= 100000 && value < 1000000) {
                         return (value / 1000) + 'K';
                     } else if (value >= 1000000) {
-                        return (Math.round(value / 1000000 * 100) / 100)  + 'M';
+                        return (Math.round(value / 1000000 * 100) / 100) + 'M';
                     } else {
                         return value;
                     }
                 },
-            }            
+            }
         },
         responsiveOptions: [
             ['screen and (max-width: 640px) and (min-width: 381px)', {
@@ -471,7 +471,7 @@ export class Dashboard1Component {
     // Line chart configuration Ends
 
     ngOnInit(): void {
-        
+
         this.user = JSON.parse(localStorage.getItem('currentUser')).user;
 
         // should not get here but what the heck
@@ -483,54 +483,54 @@ export class Dashboard1Component {
             this.user.preferences = {};
             this.user.preferences['dashboard.canadianrate.years'] = '5';
         }
-            //if (!this.user.preferences) {
-//              this.user.preferences = { 'empty':'true' };  
-            //}
-            //if (!this.user.preferences['dashboard.canadianrate.years']) {
-//              this.user.preferences['dashboard.canadianrate.years'] = "5";
-            //}
-        
+        //if (!this.user.preferences) {
+        //              this.user.preferences = { 'empty':'true' };  
+        //}
+        //if (!this.user.preferences['dashboard.canadianrate.years']) {
+        //              this.user.preferences['dashboard.canadianrate.years'] = "5";
+        //}
+
         let now = new Date();
         this.month = now.getMonth() + 1;
         this.year = now.getFullYear();
         this.isLoading = true;
-        
-        
+
+
         this.propertyService.getMidPoint().subscribe(
-          p => { this.midPoint = p; },
-          e => { this.errorMessage = e; console.log(e) },
-          () => { 
-            // Find smallest lat
-            this.isLoading = false;
-            this.propertyMidPoint.lat = this.midPoint.lat;
-            this.propertyMidPoint.lng = this.midPoint.lng;
-            this.propertyMidPoint.zoom = this.midPoint.zoom;
-          }
+            p => { this.midPoint = p; },
+            e => { this.errorMessage = e; console.log(e) },
+            () => {
+                // Find smallest lat
+                this.isLoading = false;
+                this.propertyMidPoint.lat = this.midPoint.lat;
+                this.propertyMidPoint.lng = this.midPoint.lng;
+                this.propertyMidPoint.zoom = this.midPoint.zoom;
+            }
         );
-    
+
         this.propertyService.getAll().subscribe(
-          p => { this.properties = p; },
-          e => { this.errorMessage = e; console.log(e) },
-          () => { 
-            // Find smallest lat
-            this.isLoading = false;
-            for (var i = 0; i < this.properties.length; i++) {
-              var marker = new MapMarker();
-              if (this.properties[i].latitude > 0) {
-                marker.lat = this.properties[i].latitude;
-                marker.lng = this.properties[i].longitude;
-                marker.label = this.properties[i].name;
-                marker.property = this.properties[i];
-                marker.draggable = false;
-                this.markers.push(marker);
-              }
-            } 
-          } 
+            p => { this.properties = p; },
+            e => { this.errorMessage = e; console.log(e) },
+            () => {
+                // Find smallest lat
+                this.isLoading = false;
+                for (var i = 0; i < this.properties.length; i++) {
+                    var marker = new MapMarker();
+                    if (this.properties[i].latitude > 0) {
+                        marker.lat = this.properties[i].latitude;
+                        marker.lng = this.properties[i].longitude;
+                        marker.label = this.properties[i].name;
+                        marker.property = this.properties[i];
+                        marker.draggable = false;
+                        this.markers.push(marker);
+                    }
+                }
+            }
         );
         this.updateCanadianRate();
         this.updateLoanBalanceGraph();
         this.updateLoanValueCapitalGraph();
-            
+
     }
 
     updateCanadianRate() {
@@ -540,96 +540,97 @@ export class Dashboard1Component {
         this.ratehubService.getRate(Number(this.user.preferences['dashboard.canadianrate.years'])).subscribe(
             p => { this.rates = p.rates; },
             e => { this.errorMessage = e; console.log(e) },
-            () => { 
+            () => {
                 console.log("Rates Loaded...");
                 console.log(this.rates);
-            } 
+            }
         );
     }
 
     constructor(private fgService: FinancialGraphService, private userService: UserService,
-        private ratehubService: RateHubService, private propertyService: PropertyService ) {
+        private ratehubService: RateHubService, private propertyService: PropertyService) {
     }
 
     updateLoanValueCapitalGraph() {
         if (!this.user.preferences['dashboard.loanValueCapitalGraph.start']) {
-          this.user.preferences['dashboard.loanValueCapitalGraph.start'] = "-2";
+            this.user.preferences['dashboard.loanValueCapitalGraph.start'] = "-2";
         }
         if (!this.user.preferences['dashboard.loanValueCapitalGraph.end']) {
-          this.user.preferences['dashboard.loanValueCapitalGraph.end'] = "5";
+            this.user.preferences['dashboard.loanValueCapitalGraph.end'] = "5";
         }
 
-        this.fgService.getLoanValueCapitalPrevision(Number(this.user.preferences['dashboard.loanValueCapitalGraph.start']), 
-          Number(this.user.preferences['dashboard.loanValueCapitalGraph.end'])).subscribe(
-           p => { this.loanValueCapitalPrev = p; },
-           e => { this.errorMessage = e; console.log(e); },
-           () => {
-             var thedata: Chartist.IChartistData = this.lineArea2.data;
-             var labels: any[] = [];
-             var series: any[][] = [];
-             var i:number = 0;
-             var x:number = 0;
+        this.fgService.getLoanValueCapitalPrevision(Number(this.user.preferences['dashboard.loanValueCapitalGraph.start']),
+            Number(this.user.preferences['dashboard.loanValueCapitalGraph.end'])).subscribe(
+            p => { this.loanValueCapitalPrev = p; },
+            e => { this.errorMessage = e; console.log(e); },
+            () => {
+                console.log(this.lineArea2.data);
+                var thedata: Chartist.IChartistData = this.lineArea2.data;
+                var labels: any[] = [];
+                var series: any[][] = [];
+                var i: number = 0;
+                var x: number = 0;
 
-             for (x = 0; x < this.loanValueCapitalPrev.length; x++) {
-                 series[x] = [];
-                for (i = 0; i < this.loanValueCapitalPrev[x].values.length; i++) {
-                    labels.indexOf(this.loanValueCapitalPrev[x].values[i].x) === -1 ? labels.push(this.loanValueCapitalPrev[x].values[i].x) : console.log("ok");
-                    series[x][i] = this.loanValueCapitalPrev[x].values[i].y;
+                for (x = 0; x < this.loanValueCapitalPrev.length; x++) {
+                    series[x] = [];
+                    for (i = 0; i < this.loanValueCapitalPrev[x].values.length; i++) {
+                        labels.indexOf(this.loanValueCapitalPrev[x].values[i].x) === -1 ? labels.push(this.loanValueCapitalPrev[x].values[i].x) : console.log("ok");
+                        series[x][i] = this.loanValueCapitalPrev[x].values[i].y;
+                    }
                 }
-             }
-             
-             this.lineArea2.data.labels = labels;
-             this.lineArea2.data.series = series;
-           }
-        );
-      }
-    
-    
-      updateLoanBalanceGraph() {
+
+                this.lineArea2.data.labels = labels;
+                this.lineArea2.data.series = series;
+            }
+            );
+    }
+
+
+    updateLoanBalanceGraph() {
         if (!this.user.preferences['dashboard.loanBalanceGraph.start']) {
-          this.user.preferences['dashboard.loanBalanceGraph.start'] = "-2";
+            this.user.preferences['dashboard.loanBalanceGraph.start'] = "-2";
         }
         if (!this.user.preferences['dashboard.loanBalanceGraph.end']) {
-          this.user.preferences['dashboard.loanBalanceGraph.end'] = "5";
+            this.user.preferences['dashboard.loanBalanceGraph.end'] = "5";
         }
         this.fgService.getLoansBalancePrevision(Number(this.user.preferences['dashboard.loanBalanceGraph.start']), Number(this.user.preferences['dashboard.loanBalanceGraph.end'])).subscribe(
-           p => { this.loanBalancePrev = p; },
-           e => { this.errorMessage = e; console.log(e); },
-           () => {
-             var thedata: any[] = [];
-             var keys: any[] = [];
-             var i:number = 0;
-             var x:number = 0;
-             for (i = 0; i < this.loanBalancePrev[0].values.length; i++) {
-               thedata.push( { 'y': this.loanBalancePrev[0].values[i].x } );
-               for (x = 0; x < this.loanBalancePrev.length; x++) {
-                 thedata[i][this.loanBalancePrev[x].key] = this.loanBalancePrev[x].values[i].y;             
-               }
-             }
-             for (x = 0; x < this.loanBalancePrev.length; x++) {
-                 keys.push(this.loanBalancePrev[x].key );
-             }
-             this.loanBalancePrevisionData = {
-                resize: true,
-                data: thedata,
-                xkey: 'y',
-                ykeys: keys,
-                labels:  keys,
-                lineColors: this.lineColors
-              };
-           }
+            p => { this.loanBalancePrev = p; },
+            e => { this.errorMessage = e; console.log(e); },
+            () => {
+                var thedata: any[] = [];
+                var keys: any[] = [];
+                var i: number = 0;
+                var x: number = 0;
+                for (i = 0; i < this.loanBalancePrev[0].values.length; i++) {
+                    thedata.push({ 'y': this.loanBalancePrev[0].values[i].x });
+                    for (x = 0; x < this.loanBalancePrev.length; x++) {
+                        thedata[i][this.loanBalancePrev[x].key] = this.loanBalancePrev[x].values[i].y;
+                    }
+                }
+                for (x = 0; x < this.loanBalancePrev.length; x++) {
+                    keys.push(this.loanBalancePrev[x].key);
+                }
+                this.loanBalancePrevisionData = {
+                    resize: true,
+                    data: thedata,
+                    xkey: 'y',
+                    ykeys: keys,
+                    labels: keys,
+                    lineColors: this.lineColors
+                };
+            }
         );
-      }
+    }
 
-      canadianRateChange(year: string) {
-          console.log("WHATTTTT" + year);
+    canadianRateChange(year: string) {
+        console.log("WHATTTTT" + year);
         this.user.preferences['dashboard.canadianrate.years'] = year;
         this.userService.updatePreferences(this.user).subscribe(
-           p => {  },
-           e => { console.log("Error saving pref:" + e); },
-           () => { console.log("User Pref Updated"); }
+            p => { },
+            e => { console.log("Error saving pref:" + e); },
+            () => { console.log("User Pref Updated"); }
         );
         this.updateCanadianRate();
-      }
+    }
 
 }

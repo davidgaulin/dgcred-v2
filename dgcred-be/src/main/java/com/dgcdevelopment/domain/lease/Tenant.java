@@ -1,7 +1,9 @@
 package com.dgcdevelopment.domain.lease;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,109 +13,31 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.dgcdevelopment.domain.Address;
 import com.dgcdevelopment.domain.Document;
+import com.dgcdevelopment.domain.PhoneType;
 import com.dgcdevelopment.domain.Telephone;
 import com.dgcdevelopment.domain.User;
 
+import lombok.Data;
+
 @Entity
+@Data
 public class Tenant {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long eid;
-
-	public Long getEid() {
-		return eid;
-	}
-
-	public void setEid(Long eid) {
-		this.eid = eid;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public Date getBirthday() {
-		return birthday;
-	}
-
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
-
-	public Address getPreviousAddress() {
-		return previousAddress;
-	}
-
-	public void setPreviousAddress(Address previousAddress) {
-		this.previousAddress = previousAddress;
-	}
-
-	public String getSinSsn() {
-		return sinSsn;
-	}
-
-	public void setSinSsn(String sinSsn) {
-		this.sinSsn = sinSsn;
-	}
-
-	public Document getPicture() {
-		return picture;
-	}
-
-	public void setPicture(Document picture) {
-		this.picture = picture;
-	}
-
 	private String firstName;
 	private String lastName;
 
 	@OneToMany(cascade = CascadeType.ALL)
-	private Set<Telephone> telephones = new HashSet<>();
-
-	// TODO get rid of the one phone to use all phones
-	private String telephone;
-
-	public String getTelephone() {
-		return telephone;
-	}
-
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
-
-	public Set<Telephone> getTelephones() {
-		return telephones;
-	}
-
-	public void setTelephones(Set<Telephone> telephones) {
-		this.telephones = telephones;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	@MapKey(name = "type")
+	private Map<PhoneType, Telephone> telephones = new HashMap<>();
 
 	private String email;
 	private Date birthday;
@@ -125,14 +49,6 @@ public class Tenant {
 
 	@OneToOne(cascade = CascadeType.DETACH)
 	private Document picture;
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	private User user;
@@ -148,4 +64,14 @@ public class Tenant {
 		this.documents = documents;
 	}
 
+	public void add(Telephone p) {
+		if (p.getType() == null) {
+			throw new RuntimeException("Phone Type must be specified");
+		}
+		this.telephones.put(p.getType(), p);
+	}
+
+	public void add(PhoneType pt, Telephone p) {
+		this.telephones.put(pt, p);
+	}
 }

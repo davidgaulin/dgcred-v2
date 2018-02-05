@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,18 +26,19 @@ import com.dgcdevelopment.domain.lease.LeaseRepository;
 import com.dgcdevelopment.domain.lease.Tenant;
 import com.dgcdevelopment.domain.lease.TenantRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @CrossOrigin
+@Slf4j
 public class TenantController {
-
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private TenantRepository tenantRepo;
 
 	@Autowired
 	private DocumentRepository documentRepo;
-	
+
 	@Autowired
 	private LeaseRepository leaseRepo;
 
@@ -147,19 +146,19 @@ public class TenantController {
 	public User deleteOneTenant(HttpServletRequest request, @PathVariable("eid") long eid) throws Exception {
 		User u = (User) request.getAttribute("user");
 		log.info("Deleting tenant eid: " + eid + " User: " + u.getUsername());
-		
+
 		// check if there is a lease with this tenant
 		List<Lease> leases = leaseRepo.findByTenantsEidAndUser(eid, u);
 		if (!leases.isEmpty()) {
 			log.error("Can't delete a tenant if it has a lease attached to it.");
 			throw new DataConflictException("Can't delete a tenant if it has a lease attached to it.");
 		}
-		
+
 		tenantRepo.deleteByEidAndUser(eid, u);
 		log.info("Tenant " + eid + " for user " + u.getUsername() + " is  deleted");
 		return u;
 	}
-	
+
 	//
 	// @GetMapping("/api/tenant/midPoint")
 	// public double[] getMidPoint(HttpServletRequest request) throws Exception

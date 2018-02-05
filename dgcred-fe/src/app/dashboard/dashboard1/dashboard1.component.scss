@@ -182,3 +182,24 @@
 }
 
 // Widget line Chart CSS Ends
+
+.rateTable {
+    overflow-y: scroll;
+    height: 200px;
+    width: 100%;
+    position: absolute;
+}
+
+.rateTableTr {
+    width: 100%;
+    display: inline-table;
+    height:60px;
+    table-layout: fixed;
+}
+
+.rateTableTbody {
+    overflow-y: scroll;
+    height: 360px;
+    width: 100%;
+    position: absolute;
+}

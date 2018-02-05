@@ -161,8 +161,8 @@ public class CalendarController {
 		
 		Iterable<Lease> leases = leaseRepo.findByUserEid(u.getEid());
 		for (Lease l : leases) {
-			if (l.calculateLeaseEndDate().getTime() < lastDayCurrentMonth.getTime()
-					&& l.calculateLeaseEndDate().getTime() > firstDayCurrentMonth.getTime()) {
+			if (l.getEndDate().getTime() < lastDayCurrentMonth.getTime()
+					&& l.getEndDate().getTime() > firstDayCurrentMonth.getTime()) {
 				StringBuilder summary = new StringBuilder();
 				summary.append("Lease on ");
 				summary.append(l.getProperty().getAddress().getAddress1());
@@ -172,11 +172,11 @@ public class CalendarController {
 				summary.append(l.getTenants().stream().map(i -> i.getFirstName() + " " + i.getLastName()).collect(Collectors.joining(", ")));
 				summary.append(" is ending today!");
 				String title = "Lease on " + l.getProperty().getName() + " unit " + l.getUnit().getNumber() + " ends today!";  
-				Event e = new Event(l.calculateLeaseEndDate(), title, summary.toString(), EventType.LEASING);
+				Event e = new Event(l.getEndDate(), title, summary.toString(), EventType.LEASING);
 				events.add(e);
 			}
-			if (l.calculateTerminationNotificationDate().getTime() < lastDayCurrentMonth.getTime()
-					&& l.calculateTerminationNotificationDate().getTime() > firstDayCurrentMonth.getTime()) {
+			if (l.getLeaseRenewalNoticationDate().getTime() < lastDayCurrentMonth.getTime()
+					&& l.getLeaseRenewalNoticationDate().getTime() > firstDayCurrentMonth.getTime()) {
 				StringBuilder summary = new StringBuilder();
 				summary.append("You must notify the tenant at ");
 				summary.append(l.getProperty().getAddress().getAddress1());
@@ -184,7 +184,7 @@ public class CalendarController {
 				summary.append(l.getUnit().getNumber());
 				summary.append(" today if you want to resign their lease.");
 				String title = "Last day to terminate lease on " + l.getProperty().getName() + " unit " + l.getUnit().getNumber();  
-				Event e = new Event(l.calculateLeaseEndDate(), title, summary.toString(), EventType.LEASING);
+				Event e = new Event(l.getEndDate(), title, summary.toString(), EventType.LEASING);
 				events.add(e);
 			}
 		}

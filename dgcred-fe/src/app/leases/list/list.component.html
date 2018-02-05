@@ -32,9 +32,10 @@
             <table class="table table-responsive ">
               <thead>
                 <tr>
-                  <th i18n>Tenant</th>
+                  <th i18n>Tenant(s)</th>
                   <th i18n>Start Date</th>
-                  <th i18n>Renewal Date</th>
+                  <th i18n>End Date</th>
+                  <th i18n>Renewal Notification Date</th>
                   <th i18n>Rent</th>
                   <th i18n></th>
                 </tr>
@@ -71,6 +72,10 @@
                     <a routerLink="../edit/{{l.eid}}">{{l.startDate}}</a>
                   </td>
                   <td>
+                      <a routerLink="../edit/{{l.eid}}">{{l.endDate}}</a>
+                  </td>
+                  <td>
+                      <a routerLink="../edit/{{l.eid}}">{{l.leaseRenewalNoticationDate}}</a>
                   </td>
                   <td>
                     <a routerLink="../edit/{{l.eid}}">{{l.rent | number:'.2-2' }}</a>

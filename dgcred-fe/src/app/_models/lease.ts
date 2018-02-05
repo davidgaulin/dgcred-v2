@@ -11,10 +11,13 @@ export class Lease {
     public rent: number,
     public rentPeriod: string,
     public autoRenew: boolean,
-    public renewalDate?: string,
-    public tenant?: Tenant,
+    public length?: string,
+    public lengthPeriod?: string,
+    public tenant?: Tenant[],
     public property?: Property,
     public unit?: Unit,
+    public endDate?: string,
+    public leaseRenewalNoticationDate?: string,
     public documents?: Document[]
     ) { } 
 }

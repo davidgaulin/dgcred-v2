@@ -24,13 +24,13 @@ import com.dgcdevelopment.domain.lease.LeaseRepository;
 import com.dgcdevelopment.domain.lease.Tenant;
 
 @RunWith(SpringRunner.class)
-@TestPropertySource(locations="classpath:application-test.properties")
+@TestPropertySource(locations = "classpath:application-test.properties")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TenantControllerTest extends AuthenticatedControllerWrapperTest {
-	
+
 	@Autowired
 	LeaseRepository leaseRepo;
-	
+
 	private Tenant createOneTenant(String firstName, String lastName) throws Exception {
 		Tenant t = new Tenant();
 		t.setBirthday(new Date());
@@ -42,8 +42,8 @@ public class TenantControllerTest extends AuthenticatedControllerWrapperTest {
 		p.setCountryCode("1");
 		p.setNumber("639-0999");
 		p.setType(PhoneType.MOBILE);
-		t.getTelephones().add(p);
-		
+		t.getTelephones().put(p.getType(), p);
+
 		ResponseEntity<Document> doc1 = uploadTextDocument();
 		ResponseEntity<Document> doc2 = uploadPdf();
 		ResponseEntity<Document> doc3 = uploadPicture();
@@ -53,47 +53,47 @@ public class TenantControllerTest extends AuthenticatedControllerWrapperTest {
 		docs.add(doc2.getBody());
 		docs.add(doc3.getBody());
 		t.setDocuments(docs);
-		
+
 		return t;
 	}
-	
+
 	@Test
 	public void testDeleteTenant() throws Exception {
-		
+
 		Tenant t = createOneTenant("Peter", "Stashny");
-			
+
 		// Create doc
-		ResponseEntity<Tenant> postResult =  this.trt.postForEntity("/api/tenant", t, Tenant.class);
+		ResponseEntity<Tenant> postResult = this.trt.postForEntity("/api/tenant", t, Tenant.class);
 		assertTrue(postResult.getStatusCode().is2xxSuccessful());
 
-		
 		// Check that we can retrive it
-		ResponseEntity<Tenant> getResult =  this.trt.getForEntity("/api/tenant/" + postResult.getBody().getEid(), Tenant.class);
+		ResponseEntity<Tenant> getResult = this.trt.getForEntity("/api/tenant/" + postResult.getBody().getEid(),
+				Tenant.class);
 		assertTrue(getResult.getStatusCode().is2xxSuccessful());
 
 		this.trt.delete("/api/tenant/" + postResult.getBody().getEid());
-		
+
 		// Check that we can't retrive it anymore
-		ResponseEntity<Tenant> getNotFoundResult =  this.trt.getForEntity("/api/tenant/" + postResult.getBody().getEid(), Tenant.class);
+		ResponseEntity<Tenant> getNotFoundResult = this.trt.getForEntity("/api/tenant/" + postResult.getBody().getEid(),
+				Tenant.class);
 		assertTrue(getNotFoundResult.getStatusCode().is4xxClientError());
-		
+
 	}
-	
+
 	@Test
 	public void testDeleteTenantWithLease() throws Exception {
-		
+
 		Tenant t = createOneTenant("Peter", "Stashny");
-			
+
 		// Create doc
-		ResponseEntity<Tenant> postResult =  this.trt.postForEntity("/api/tenant", t, Tenant.class);
+		ResponseEntity<Tenant> postResult = this.trt.postForEntity("/api/tenant", t, Tenant.class);
 		assertTrue(postResult.getStatusCode().is2xxSuccessful());
 
-		
 		// Check that we can retrive it
-		ResponseEntity<Tenant> getResult =  this.trt.getForEntity("/api/tenant/" + postResult.getBody().getEid(), Tenant.class);
+		ResponseEntity<Tenant> getResult = this.trt.getForEntity("/api/tenant/" + postResult.getBody().getEid(),
+				Tenant.class);
 		assertTrue(getResult.getStatusCode().is2xxSuccessful());
-		
-		
+
 		// Create lease
 		Lease l = new Lease();
 		l.addTenant(postResult.getBody());
@@ -102,81 +102,81 @@ public class TenantControllerTest extends AuthenticatedControllerWrapperTest {
 
 		// try to delete it
 		this.trt.delete("/api/tenant/" + postResult.getBody().getEid());
-		
+
 		// Check that we can still retrive it since the delete failed
-		getResult =  this.trt.getForEntity("/api/tenant/" + postResult.getBody().getEid(), Tenant.class);
+		getResult = this.trt.getForEntity("/api/tenant/" + postResult.getBody().getEid(), Tenant.class);
 		assertTrue(getResult.getStatusCode().is2xxSuccessful());
-		
+
 		// Delete tenant from the lease
 		l.setTenants(null);
 		leaseRepo.save(l);
-		
+
 		// try to delete it again
 		this.trt.delete("/api/tenant/" + postResult.getBody().getEid());
-		
+
 		// Check that we can't retrive it anymore
-		ResponseEntity<Tenant> getNotFoundResult =  this.trt.getForEntity("/api/tenant/" + postResult.getBody().getEid(), Tenant.class);
+		ResponseEntity<Tenant> getNotFoundResult = this.trt.getForEntity("/api/tenant/" + postResult.getBody().getEid(),
+				Tenant.class);
 		assertTrue(getNotFoundResult.getStatusCode().is4xxClientError());
-		
+
 	}
-	
+
 	@Test
 	public void testTenantCreation() throws Exception {
-		
+
 		Tenant t = createOneTenant("Peter", "Stashny");
-			
+
 		// Create doc
-		ResponseEntity<Tenant> postResult =  this.trt.postForEntity("/api/tenant", t, Tenant.class);
+		ResponseEntity<Tenant> postResult = this.trt.postForEntity("/api/tenant", t, Tenant.class);
 		assertTrue(postResult.getStatusCode().is2xxSuccessful());
 
-		
 		// Check that we can retrive it
-		ResponseEntity<Tenant> getResult =  this.trt.getForEntity("/api/tenant/" + postResult.getBody().getEid(), Tenant.class);
+		ResponseEntity<Tenant> getResult = this.trt.getForEntity("/api/tenant/" + postResult.getBody().getEid(),
+				Tenant.class);
 		assertTrue(getResult.getStatusCode().is2xxSuccessful());
-		
+
 		// Check the data is in there
 		assertTrue(getResult.getBody().getDocuments() != null);
 		assertTrue(getResult.getBody().getDocuments().size() == 3);
 		assertEquals("Peter", getResult.getBody().getFirstName());
 		assertEquals("Stashny", getResult.getBody().getLastName());
 		assertTrue(downloadTextDocument(((Document) t.getDocuments().toArray()[0]).getEid()));
-		
-	}
 
+	}
 
 	@Test
 	public void testTenantSearch() throws Exception {
-		
+
 		Tenant t1 = createOneTenant("David", "Gaulin");
 		Tenant t2 = createOneTenant("Éric", "Gaulin");
 		Tenant t3 = createOneTenant("Gilles", "Carle");
 		Tenant t4 = createOneTenant("Sophia", "Laurain");
 		Tenant t5 = createOneTenant("Elizabeth", "Sue");
-		
+
 		// save them
 		this.trt.postForEntity("/api/tenant", t1, Tenant.class);
 		this.trt.postForEntity("/api/tenant", t2, Tenant.class);
 		this.trt.postForEntity("/api/tenant", t3, Tenant.class);
 		this.trt.postForEntity("/api/tenant", t4, Tenant.class);
 		this.trt.postForEntity("/api/tenant", t5, Tenant.class);
-		
+
 		// Search for them
 		ResponseEntity<Tenant[]> getResult;
-		getResult =  this.trt.getForEntity("/api/tenant/search/gaulin", Tenant[].class);
+		getResult = this.trt.getForEntity("/api/tenant/search/gaulin", Tenant[].class);
 		assertEquals(2, getResult.getBody().length);
-		assertTrue(getResult.getBody()[0].getFirstName().equals("David") 
+		assertTrue(getResult.getBody()[0].getFirstName().equals("David")
 				|| getResult.getBody()[1].getFirstName().equals("David"));
-		
-		getResult =  this.trt.getForEntity("/api/tenant/search/GILLES", Tenant[].class);
+
+		getResult = this.trt.getForEntity("/api/tenant/search/GILLES", Tenant[].class);
 		assertEquals(1, getResult.getBody().length);
 		assertTrue(getResult.getBody()[0].getFirstName().equals("Gilles"));
-		
-		getResult =  this.trt.getForEntity("/api/tenant/search/GILLES", Tenant[].class);
+
+		getResult = this.trt.getForEntity("/api/tenant/search/GILLES", Tenant[].class);
 		assertEquals(1, getResult.getBody().length);
 		assertTrue(getResult.getBody()[0].getFirstName().equals("Gilles"));
-		
-		getResult =  this.trt.getForEntity("/api/tenant/search/6390999", Tenant[].class);
-		assertTrue(getResult.getBody().length >= 5);	
-		
-	}	
+
+		getResult = this.trt.getForEntity("/api/tenant/search/6390999", Tenant[].class);
+		assertTrue(getResult.getBody().length >= 5);
+
+	}
 }

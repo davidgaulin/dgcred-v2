@@ -1,9 +1,13 @@
 package com.dgcdevelopment.web;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dgcdevelopment.domain.Document;
 import com.dgcdevelopment.domain.DocumentRepository;
+import com.dgcdevelopment.domain.RentPeriod;
 import com.dgcdevelopment.domain.User;
 import com.dgcdevelopment.domain.exceptions.MissingEntityException;
 import com.dgcdevelopment.domain.lease.Lease;
@@ -93,6 +98,42 @@ public class LeaseController {
 		Lease t = leaseRepo.save(lease);
 		log.info("Save lease completed");
 		return t;
+	}
+
+	@GetMapping("/api/lease/upcomingRenewal/{duration}/{unit}")
+	public List<Lease> getUpcomingRenewal(HttpServletRequest request, @PathVariable int duration,
+			@PathVariable String unit) throws Exception {
+		log.info("Retrieving all leases...");
+		List<Lease> leases = leaseRepo.findByUserOrderByEidAsc((User) request.getAttribute("user"));
+
+		List<Lease> upcoming = null;
+		RentPeriod rp = RentPeriod.MONTHS;
+		try {
+			rp = RentPeriod.valueOf(unit.toUpperCase());
+		} catch (IllegalArgumentException iae) {
+			log.info("Invalid unit: {}. Defaulting to months", unit);
+		}
+
+		switch (rp) {
+		case WEEKS:
+			upcoming = leases.stream().filter(
+					l -> l.getLeaseRenewalNoticationDate().getTime() > new DateTime().minusWeeks(duration).getMillis())
+					.collect(Collectors.toList());
+			break;
+
+		case YEARS:
+			upcoming = leases.stream().filter(
+					l -> l.getLeaseRenewalNoticationDate().getTime() > new DateTime().minusYears(duration).getMillis())
+					.collect(Collectors.toList());
+			break;
+		case MONTHS:
+		default:
+			upcoming = leases.stream().filter(
+					l -> l.getLeaseRenewalNoticationDate().getTime() > new DateTime().minusMonths(duration).getMillis())
+					.collect(Collectors.toList());
+			break;
+		}
+		return upcoming;
 	}
 
 	@GetMapping("/api/lease/addDocument/{peid}/{deid}")
