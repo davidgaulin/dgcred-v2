@@ -24,9 +24,13 @@ import com.dgcdevelopment.domain.Telephone;
 import com.dgcdevelopment.domain.User;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Data
+@Setter
+@Getter
 public class Tenant {
 
 	@Id

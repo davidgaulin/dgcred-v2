@@ -194,7 +194,10 @@ export class EditComponent implements OnInit {
       businessNumber: [''],
       ssn: [''],
       driverLicense: [''],
-      phoneNumber: [''],
+      phoneNumber: this._fb.group({
+        type: [''],
+        str: [''],
+      }),
       email: [''],
       companyName: [''],
       address: this._fb.group({
@@ -211,7 +214,7 @@ export class EditComponent implements OnInit {
 
   removeTenant(i: number) {
     // remove address from the list
-    const control = <FormArray>this.leaseForm.controls['units'];
+    const control = <FormArray>this.leaseForm.controls['tenants'];
     control.removeAt(i);
   }
 

@@ -13,6 +13,16 @@ const appRoutes: Routes = [
     redirectTo: 'dashboard/dashboard1',
     pathMatch: 'full',
   },
+  {
+    path: 'login',
+    redirectTo: 'pages/login',
+    pathMatch: 'full',
+  },
+  {
+    path: 'logout',
+    redirectTo: 'pages/login',
+    pathMatch: 'full',
+  },  
   { path: '', component: FullLayoutComponent, data: { title: 'full Views' }, children: Full_ROUTES },
   { path: '', component: ContentLayoutComponent, data: { title: 'content Views' }, children: CONTENT_ROUTES },
 ];

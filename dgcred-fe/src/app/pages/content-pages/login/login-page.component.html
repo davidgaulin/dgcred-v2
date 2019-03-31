@@ -10,7 +10,7 @@
                     <div class="card-body">
                         <div class="card-block">
                             <h2>Login</h2>
-                            <form novalidate="" (ngSubmit)="onSubmit()" #f="ngForm">
+                            <form (ngSubmit)="onSubmit()" #f="ngForm">
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <input type="email" class="form-control" name="inputEmail" id="inputEmail" placeholder="Email" ngModel required email>
@@ -22,7 +22,7 @@
                                         <input type="password" class="form-control" name="inputPass" id="inputPass" placeholder="Password" ngModel required>
                                     </div>
                                 </div>
-
+<!--
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -34,10 +34,10 @@
                                         </div>
                                     </div>
                                 </div>
-
+                            -->
                                 <div class="form-group">
                                     <div class="col-md-12">
-                                        <button type="button" class="btn btn-pink btn-block btn-raised">Submit</button>
+                                        <button type="submit" class="btn btn-pink btn-block btn-raised">Submit</button>
                                         <button type="button" class="btn btn-secondary btn-block btn-raised">Cancel</button>
                                     </div>
                                 </div>

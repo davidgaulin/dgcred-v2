@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs/Rx';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { AuthHttpService } from './auth-http.service';
 
 import { environment } from '../../environments/environment';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class LookupService {
@@ -96,12 +96,15 @@ export class LookupService {
 
     getFinancialInstitutions(): any {
         // ARGS -- Useless but required ---
-        let a = this.http.put(environment.apiUrl + '/property/put', { "name": "test" }).map((response: Response) => response.json()).catch(handleError);
+        let a = this.http.put(environment.apiUrl + '/property/put', { "name": "test" }).pipe(
+        map((response: Response) => response.json()))
+        //.catch(handleError);
         // ARGS -- Useless but required ---
 
         if (!this.lookups) {
-            this.financialInstitutions = this.http.get(environment.apiUrl + '/lookup/financialInstitutions')
-                .map((response: Response) => response.json()).catch(handleError);
+            this.financialInstitutions = this.http.get(environment.apiUrl + '/lookup/financialInstitutions').pipe(
+                map((response: Response) => response.json()));
+                //.catch(handleError);
         }
         console.log(this.financialInstitutions);
         return this.financialInstitutions;
@@ -109,12 +112,15 @@ export class LookupService {
 
     getAll() {
         // ARGS -- Useless but required ---
-        let a = this.http.put(environment.apiUrl + '/property/put', { "name": "test" }).map((response: Response) => response.json()).catch(handleError);
+        let a = this.http.put(environment.apiUrl + '/property/put', { "name": "test" }).pipe(
+            map((response: Response) => response.json()));
+            //.catch(handleError);
         // ARGS -- Useless but required ---
 
         if (!this.lookups) {
-            this.lookups = this.http.get(environment.apiUrl + '/lookups')
-                .map((response: Response) => response.json()).catch(handleError);
+            this.lookups = this.http.get(environment.apiUrl + '/lookups').pipe(
+                map((response: Response) => response.json()));
+                //.catch(handleError);
         }
         console.log(this.lookups);
         return this.lookups;
@@ -122,7 +128,7 @@ export class LookupService {
 
 }
 
-function handleError(error: any, caugth: any) {
-    let errorMsg = error.message || 'Wopidoooo!  Something is not rigth with the world.  Check again'
-    return Observable.throw(errorMsg);
-}
+// function handleError(error: any, caugth: any) {
+//     let errorMsg = error.message || 'Wopidoooo!  Something is not rigth with the world.  Check again'
+//     return Observable.throw(errorMsg);
+// }

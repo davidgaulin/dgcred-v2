@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Request, XHRBackend, RequestMethod, RequestOptions, Response, Http, RequestOptionsArgs, Headers } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
 import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthHttpService extends Http {
@@ -59,12 +59,14 @@ export class AuthHttpService extends Http {
 	this._defaultOptions.headers.set('Authorization', 'Bearer ' + this.jwtString());
     this._defaultOptions.headers.set('X-PINGOVER', 'pingpong');
     this._defaultOptions.withCredentials = true;
-		return super.request(url, options).catch((error: Response) => {
-            if ((error.status === 401 || error.status === 403) && !(url == '/login' || url == '/register' || url == '/logout')) {
-                console.log('The authentication session expires or the user is not authorised. Force refresh of the current page.');
-                this.router.navigate(['logout']);
-            }
-            return Observable.throw(error);
-        });
+        return super.request(url, options);
+        // TODO
+        // .catch((error: Response) => {
+        //     if ((error.status === 401 || error.status === 403) && !(url == '/login' || url == '/register' || url == '/logout')) {
+        //         console.log('The authentication session expires or the user is not authorised. Force refresh of the current page.');
+        //         this.router.navigate(['logout']);
+        //     }
+        //     return Observable.throw(error);
+        // });
     }
 }
